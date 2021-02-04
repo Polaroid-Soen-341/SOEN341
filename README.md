@@ -1,4 +1,10 @@
 # SOEN341
+## Description
+Nowadays, social media is used by a large portion of the population. This project is a simplified version of 
+the well-known Instagram platform. It includes some core features such as posting a picture (with a text descritpion 
+if desired by the user), following another user, and leaving comments on pictures posted by users. The objective of 
+this project is to learn how to effectively develop a software application as a team.
+
 ## Core Features
 - Posting a picture (with text description)
 - Following a user
