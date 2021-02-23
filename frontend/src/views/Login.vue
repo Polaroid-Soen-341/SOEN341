@@ -1,0 +1,89 @@
+<template>
+    <v-container grid-list-md>
+      <v-layout row wrap align-center justify-center fill-height>
+        <v-flex xs12 sm8 lg5 md5>
+          <v-card class="login-card mt-16">
+            <v-card-title>
+              <span class="headline">Authentication</span>
+            </v-card-title>
+
+            <v-spacer/>
+
+            <v-card-text>
+
+              <v-layout
+                row
+                fill-height
+                justify-center
+                align-center
+                v-if="loading"
+              >
+                <v-progress-circular
+                  :size="50"
+                  color="primary"
+                  indeterminate
+                />
+              </v-layout>
+
+
+              <v-form v-else ref="form" v-model="valid" lazy-validation>
+                <v-container>
+
+                  <v-text-field
+                    v-model="credentials.username"
+                    :counter="70"
+                    label="email address"
+                    maxlength="70"
+                    required
+                  />
+
+                  <v-text-field
+                    type="password"
+                    v-model="credentials.password"
+                    :counter="20"
+                    label="password"
+                    maxlength="20"
+                    required
+                  />
+
+                </v-container>
+                <v-btn class="white--text ml-2" color="deep-purple darken-2" :disabled="!valid" @click="login()">Login</v-btn>
+                <v-btn class="white--text ml-2" color="deep-purple darken-2" :disabled="!valid" @click="login()">Register</v-btn>
+
+              </v-form>
+
+
+            </v-card-text>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
+</template>
+
+<script>
+import axios from 'axios';
+import router from '../router';
+export default {
+    name: 'Login',
+    data: () => ({
+        credentials: {},
+        valid:true,
+        loading:false
+    }),
+    methods: {
+        login() {
+            axios.get('http://localhost:8000/auth/').then(response => {
+              // this.$session.start();
+              // this.$session.set('token', res.data.token);
+              this.credentials = response
+              console.log(response)
+              if(this.credentials.status === 200){
+              router.push('/feed');
+            }
+            }).catch(e => {
+              console.log(e)
+            })
+        }
+    }
+}
+</script>
