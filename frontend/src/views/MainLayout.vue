@@ -73,7 +73,6 @@
 </template>
 
 <script>
-// import router from "./router";
 export default {
   name: "MainLayout",
   // mounted() {
@@ -94,16 +93,16 @@ export default {
     //   console.log(this.items[this.selectedItem])
     //   this.$router.push(this.items[this.selectedItem].path)
     // },
-    // checkLoggedIn() {
-    //   this.$session.start();
-    //   if (!this.$session.has("token")) {
-    //     router.push("/auth");
-    //   }
-    // },
-    // logout: function () {
-    //   this.$session.destroy()
-    //   this.$router.push('/auth')
-    // }
+    checkLoggedIn() {
+      this.$session.start();
+      if (!this.$session.has("token")) {
+        this.$router.push('/');
+      }
+    },
+    logout: function () {
+      this.$session.destroy()
+      this.$router.push('/')
+    }
   }
 };
 </script>

@@ -1,20 +1,21 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Login from '../views/Login.vue'
-import MainLayout from '../views/MainLayout.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '',
     name: 'Login',
-    component: Login
+    component: () => import('../views/Login.vue')
   },
   {
     path: '/feed',
     name: 'MainLayout',
-    component: MainLayout
+    component: () => import('../views/MainLayout.vue'),
+    children: [
+      
+    ]
   }
 ]
 

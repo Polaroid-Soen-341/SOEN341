@@ -15,28 +15,28 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-# from django.contrib.auth.models import User
-# from rest_framework import routers, serializers, viewsets
+from django.contrib.auth.models import User
+from rest_framework import routers, serializers, viewsets
 from rest_framework_jwt.views import obtain_jwt_token
 
-# class UserSerializer(serializers.HyperlinkedModelSerializer):
-#     class Meta:
-#         model = User
-#         fields = ['url', 'username', 'email']
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = User
+        fields = ['url', 'username', 'email']
 
-# # ViewSets define the view behavior.
-# class UserViewSet(viewsets.ModelViewSet):
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializer
+# ViewSets define the view behavior.
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
-# # Routers provide an easy way of automatically determining the URL conf.
-# router = routers.DefaultRouter()
-# router.register(r'users', UserViewSet)
+# Routers provide an easy way of automatically determining the URL conf.
+router = routers.DefaultRouter()
+router.register(r'users', UserViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('auth/', admin.site.urls)
+    path('auth/', admin.site.urls),
     # path('auth/', obtain_jwt_token),
-    # path('', include(router.urls)),
-    # path('api-auth/', include('rest_framework.urls'))
+    path('', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls'))
 ]

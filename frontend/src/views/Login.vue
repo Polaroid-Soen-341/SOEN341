@@ -62,7 +62,6 @@
 
 <script>
 import axios from 'axios';
-import router from '../router';
 export default {
     name: 'Login',
     data: () => ({
@@ -78,7 +77,7 @@ export default {
               this.credentials = response
               console.log(response)
               if(this.credentials.status === 200){
-              router.push('/feed');
+              this.$router.push('/feed');
             }
             }).catch(e => {
               console.log(e)
