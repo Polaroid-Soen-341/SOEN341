@@ -10,6 +10,7 @@ script:
 -pytest
 
 #deployment specifications
+#testing
 deploy: 
   provider: pages
   skip-cleanup: true
