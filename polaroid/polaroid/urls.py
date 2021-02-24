@@ -38,7 +38,7 @@ urlpatterns = [
     path('auth/', admin.site.urls),
     # path('auth/', obtain_jwt_token),
     path('', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls'))
+    path('api-auth/', include('api_auth.urls'))
 
     #From account 
     #path('api/account/', include('account.api.urls', 'account_api'))
