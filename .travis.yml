@@ -9,6 +9,7 @@ install:
 script:
 -pytest
 
+#deployment specifications
 deploy: 
   provider: pages
   skip-cleanup: true
