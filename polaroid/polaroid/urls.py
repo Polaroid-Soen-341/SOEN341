@@ -39,4 +39,7 @@ urlpatterns = [
     # path('auth/', obtain_jwt_token),
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls'))
+
+    #From account 
+    #path('api/account/', include('account.api.urls', 'account_api'))
 ]
