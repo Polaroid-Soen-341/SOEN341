@@ -18,6 +18,7 @@ from django.urls import path, include
 from django.contrib.auth.models import User
 from rest_framework import routers, serializers, viewsets
 from rest_framework_jwt.views import obtain_jwt_token
+from rest_framework.authtoken import views
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -38,5 +39,6 @@ urlpatterns = [
     path('auth/', admin.site.urls),
     # path('auth/', obtain_jwt_token),
     path('', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls'))
+    path('api-auth/', include('rest_framework.urls')),
+    path('api-token-auth/', views.obtain_auth_token, name='api-token-auth')
 ]
