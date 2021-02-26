@@ -1,0 +1,21 @@
+language: python
+python:
+- 3.9.1
+#command to instal dependencies
+install:
+- pip install -r requirements.txt
+
+#command to run tests
+script:
+- pytest
+
+#deployment specifications
+#testing
+deploy: 
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN
+  keep_history: true
+
+  on: 
+    branch: develop
