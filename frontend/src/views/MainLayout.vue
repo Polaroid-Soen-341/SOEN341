@@ -75,9 +75,9 @@
 <script>
 export default {
   name: "MainLayout",
-  // mounted() {
-  //   this.checkLoggedIn();
-  // },
+  mounted() {
+    this.checkLoggedIn();
+  },
   data: () => ({
     drawer: null,
     selectedItem: null,

@@ -9,3 +9,8 @@ export default {
   name: 'App'
 }
 </script>
+<style>
+.v-application--wrap {
+  background-color: rgb(207, 205, 205);
+}
+</style>
