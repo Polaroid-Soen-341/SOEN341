@@ -1,6 +1,7 @@
 django
 gunicorn
 pillow
+pytest
 djangorestframework
 django-filter
 django-cors-headers
