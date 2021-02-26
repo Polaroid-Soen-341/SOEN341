@@ -29,22 +29,31 @@
               <v-form v-else ref="form" v-model="newUserValid" lazy-validation>
                 <v-container>
                   <v-text-field
-                    v-model="newUser.firstname"
-                    :counter="70"
+                    v-model="newUser.first_name"
+                    :counter="20"
                     label="First Name"
-                    maxlength="70"
+                    maxlength="20"
                     required
                     outlined
                     :rules="registerRules.firstname"/>
 
                   <v-text-field
-                    v-model="newUser.lastname"
-                    :counter="70"
+                    v-model="newUser.last_name"
+                    :counter="20"
                     label="Last Name"
-                    maxlength="70"
+                    maxlength="20"
                     required
                     outlined
                     :rules="registerRules.lastname"/>
+
+                  <v-text-field
+                    v-model="newUser.username"
+                    :counter="20"
+                    label="Username"
+                    maxlength="20"
+                    required
+                    outlined
+                    :rules="registerRules.username"/>
 
                   <v-text-field
                     v-model="newUser.email"
@@ -58,23 +67,22 @@
                   <v-text-field
                     type="password"
                     v-model="newUser.password"
-                    :counter="20"
+                    :counter="30"
                     label="Password"
-                    maxlength="20"
+                    maxlength="30"
                     required
                     outlined
                     :rules="registerRules.password"/>
 
-                  <!-- <v-text-field
+                  <v-text-field
                     type="password"
                     v-model="confirmPassword"
-                    :counter="20"
+                    :counter="30"
                     label="Confirm Password"
-                    maxlength="20"
+                    maxlength="30"
                     required
                     outlined
-                    :rules="registerRules.confirmPassword"
-                    /> -->
+                    :rules="[registerRules.confirmPassword, passwordConfirmationRule]"/>
                 </v-container>
                 <v-divider class="mt-1 mb-3"></v-divider>
                 <v-btn class="white--text" color="deep-purple darken-2" block small :disabled="!newUserValid" @click="submit()">Submit</v-btn>
@@ -82,6 +90,22 @@
               </v-form>
             </v-card-text>
           </v-card>
+
+          <v-snackbar v-model="snackbarError"
+                      :timeout="timeout"
+                      absolute
+                      bottom
+                      color="red darken-2">
+                      {{ errorMessage }}
+          </v-snackbar>
+
+          <v-snackbar v-model="snackbarApproved"
+                      :timeout="timeout"
+                      absolute
+                      bottom
+                      color="success">
+                      {{ approvedMessage }}
+          </v-snackbar>
 
         </v-flex>
       </v-layout>
@@ -96,7 +120,12 @@ export default {
       newUser: {},
       newUserValid: true,
       loading: false,
-      confirmPassword: '',
+      confirmPassword: null,
+      snackbarError: false,
+      errorMessage: 'Unable to create new account!',
+      snackbarApproved: false,
+      approvedMessage: 'New Account successfully created!',
+      timeout: 5000,
       registerRules: {
         firstname: [
           v => !!v || 'Firstname is required',
@@ -108,30 +137,34 @@ export default {
           v => (v && v.length > 1) || 'A lastname must be more than 1 characters long',
           v => /^[a-z]+$/.test(v) || 'A lastname can only contain letters'
         ],
+        username: [
+          v => !!v || 'Username is required',
+          v => (v && v.length > 1) || 'A username must be more than 1 characters long',
+          v => /^[a-z0-9_]+$/.test(v) || 'A username can only contain letters'
+        ],
         email: [
           v => !!v || 'Email is required',
-          v => (v && v.length > 3) || 'A username must be more than 3 characters long',
-          v => /^[a-z0-9_]+$/.test(v) || 'A username can only contain letters and digits'
+          v => !v || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
         ],
         password: [
           v => !!v || 'Password is required',
-          v => (v && v.length > 7) || 'The password must be longer than 7 characters'
-        ]
-        // confirmPassword: [
-        //   v => !!v || 'Confirm Password is required',
-        //   v => (v === this.newUser.password) || 'Confirm password must match your password'
-        // ]
+          v => (v && v.length > 7) || 'Password must be at least 8 characters long'
+        ],
+        confirmPassword: [
+          v => !!v || 'Confirm Password is required'
+        ],
       }
   }),
   methods: {
       submit() {
         if (this.$refs.form.validate()) {
             this.loading = true;
-            axios.post('http://localhost:8000/auth/create/', this.newUser).then(response => {
+            axios.post('http://localhost:8000/api-auth/user/create/', this.newUser).then(response => {
+              this.snackbarApproved = true
               console.log(response)
               this.$router.push('/');
             }).catch(e => {
-              // this.snackbar = true
+              this.snackbarError = true
               this.loading = false
               console.log(e)
             })
@@ -139,9 +172,9 @@ export default {
       }
   },
   computed: {
-    // passwordConfirmationRule() {
-    //     return () => (this.newUser.password === this.newUser.confirmPassword) || 'Passwords must match'
-    // },
+    passwordConfirmationRule() {
+      return (this.newUser.password === this.confirmPassword) || 'Passwords must match'
+    }
   }
 }
 </script>

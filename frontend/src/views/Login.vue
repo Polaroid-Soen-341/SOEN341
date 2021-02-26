@@ -59,7 +59,7 @@
                       :timeout="timeout"
                       absolute
                       bottom
-                      color="red">
+                      color="red darken-2">
                       {{ errorMessage }}
           </v-snackbar>
 
