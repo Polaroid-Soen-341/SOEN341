@@ -95,7 +95,7 @@ export default {
         login() {
           if (this.$refs.form.validate()) {
             this.loading = true;
-            axios.post('http://localhost:8000/auth/', this.credentials).then(response => {
+            axios.post('http://localhost:8000/api-token-auth/', this.credentials).then(response => {
               this.$session.start();
               this.$session.set('token', response.data.token);
               this.$router.push('/feed');
