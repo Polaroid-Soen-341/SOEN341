@@ -12,7 +12,8 @@ this project is to learn how to effectively develop a software application as a 
 
 ## Languages & Techniques
 - python
-- java script
+- Vue.js
+- Vuetify
 - html/css
 - Django
 ## Student names
