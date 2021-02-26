@@ -159,7 +159,7 @@ export default {
       submit() {
         if (this.$refs.form.validate()) {
             this.loading = true;
-            axios.post('http://localhost:8000/api-auth/user/create/', this.newUser).then(response => {
+            axios.post('http://localhost:8000/api-auth/user/create', this.newUser).then(response => {
               this.snackbarApproved = true
               console.log(response)
               this.$router.push('/');
