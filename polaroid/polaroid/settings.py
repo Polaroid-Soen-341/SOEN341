@@ -37,6 +37,7 @@ CORS_ALLOWED_ORIGINS = [
 
 INSTALLED_APPS = [
     'content.apps.ContentConfig',
+    'api_auth.apps.ApiAuthConfig',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -54,12 +55,14 @@ REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+        'rest_framework.permissions.IsAuthenticated'
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ),
 }
 # We may not need this. Decide whether we will use it or not on the next meeting
