@@ -6,7 +6,7 @@ from . import models
 from .permissions import IsOwnerOrReadOnly
 
 class GenericContent(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
     def get_queryset(self):
         queryset = self.base_model.objects.filter(id=self.kwargs['pk'])
