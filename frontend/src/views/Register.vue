@@ -82,6 +82,7 @@
                     maxlength="30"
                     required
                     outlined
+                    @keyup.enter="submit()"
                     :rules="[registerRules.confirmPassword, passwordConfirmationRule]"/>
                 </v-container>
                 <v-divider class="mt-1 mb-3"></v-divider>
@@ -130,17 +131,17 @@ export default {
         firstname: [
           v => !!v || 'Firstname is required',
           v => (v && v.length > 1) || 'A firstname must be more than 1 characters long',
-          v => /^[a-z]+$/.test(v) || 'A firstname can only contain letters'
+          v => /^[a-zA-Z]+$/.test(v) || 'A firstname can only contain letters'
         ],
         lastname: [
           v => !!v || 'Lastname is required',
           v => (v && v.length > 1) || 'A lastname must be more than 1 characters long',
-          v => /^[a-z]+$/.test(v) || 'A lastname can only contain letters'
+          v => /^[a-zA-Z]+$/.test(v) || 'A lastname can only contain letters'
         ],
         username: [
           v => !!v || 'Username is required',
           v => (v && v.length > 1) || 'A username must be more than 1 characters long',
-          v => /^[a-z0-9_]+$/.test(v) || 'A username can only contain letters'
+          v => /^[a-zA-Z0-9_]+$/.test(v) || 'A username can only contain letters'
         ],
         email: [
           v => !!v || 'Email is required',
