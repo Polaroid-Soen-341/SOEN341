@@ -1,6 +1,7 @@
 language: python
 python:
 - 3.9.1
+cache: pip
 #command to instal dependencies
 install:
 - pip install -r requirements.txt
