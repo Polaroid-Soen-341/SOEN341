@@ -85,9 +85,11 @@
                     @keyup.enter="submit()"
                     :rules="[registerRules.confirmPassword, passwordConfirmationRule]"/>
                 </v-container>
-                <v-divider class="mt-1 mb-3"></v-divider>
-                <v-btn class="white--text" color="deep-purple darken-2" block small :disabled="!newUserValid" @click="submit()">Submit</v-btn>
-
+                <div align="center" class="mx-3">
+                  <v-divider class="mt-1 mb-3"></v-divider>
+                  <v-btn class="white--text" color="deep-purple darken-2" block small :disabled="!newUserValid" @click="submit()">Submit</v-btn>
+                  <v-btn class="white--text text-capitalize px-2 mt-2" color="deep-purple darken-2" small text :disabled="!newUserValid" @click="$router.push('/')">Back to Login</v-btn>
+                </div>
               </v-form>
             </v-card-text>
           </v-card>
