@@ -4,8 +4,8 @@ from rest_framework.permissions import AllowAny, IsAdminUser
 from django.contrib.auth.models import User, Group
 from django.contrib.auth import get_user_model
 from . import serializers
-from api_auth.serializers import RegisterUserSerializer, UserProfileSerializer
-from .models import PolaroidUser
+from api_auth.serializers import RegisterUserSerializer
+from .models import User
 # from django.contrib.auth import authenticate
 # from django.views.decorators.csrf import csrf_exempt
 # from rest_framework.authtoken.models import Token
@@ -18,14 +18,17 @@ from .models import PolaroidUser
 # from rest_framework.response import Response
 
 class UserCreate(generics.CreateAPIView):
-    queryset = PolaroidUser.objects.all()
+    queryset = User.objects.all()
     serializer_class = serializers.RegisterUserSerializer
-    permission_classes = (AllowAny, )
+    permission_classes = (permissions.AllowAny, )
 
 class UserAuth(generics.ListAPIView):
-    queryset = PolaroidUser.objects.all().order_by('fullname')
+    queryset = User.objects.all().order_by('fullname')
     serializer_class = serializers.RegisterUserSerializer
     permission_classes = (permissions.IsAuthenticated,)
+
+
+
 
 # @csrf_exempt
 # @api_view(["POST"])

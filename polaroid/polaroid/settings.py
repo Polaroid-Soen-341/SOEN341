@@ -50,8 +50,7 @@ INSTALLED_APPS = [
     'corsheaders',
 
 ]
-
-AUTH_USER_MODEL = 'api_auth.PolaroidUser'
+AUTH_USER_MODEL = 'api_auth.User'
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -116,6 +115,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+    
     }
 }
 
@@ -159,4 +159,3 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 #for django-allauth
-
