@@ -11,6 +11,6 @@ export default {
 </script>
 <style>
 .v-application--wrap {
-  background-color: rgb(207, 205, 205);
+  background-color: rgb(233, 233, 233);
 }
 </style>
