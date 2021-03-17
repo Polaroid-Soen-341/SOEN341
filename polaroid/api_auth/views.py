@@ -20,7 +20,7 @@ from .models import User
 class UserCreate(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = serializers.RegisterUserSerializer
-    permission_classes = (permissions.AllowAny, )
+    permission_classes = (AllowAny, )
 
 class UserAuth(generics.ListAPIView):
     queryset = User.objects.all().order_by('fullname')
