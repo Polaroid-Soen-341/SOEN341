@@ -29,9 +29,9 @@
 
                   <v-text-field
                     v-model="credentials.username"
-                    :counter="25"
+                    :counter="20"
                     label="Username"
-                    maxlength="25"
+                    maxlength="20"
                     required
                     outlined
                     :rules="rules.username"/>
@@ -44,14 +44,17 @@
                     maxlength="20"
                     required
                     outlined
+                    @keyup.enter="login()"
                     :rules="rules.password"/>
 
                 </v-container>
-                <v-btn class="white--text" color="deep-purple darken-2" block small :disabled="!valid" @click="login()">Login</v-btn>
-                <v-divider class="mt-3 mb-1 mx-3"></v-divider>
-                <div class="text-center"> - or - </div>
-                <v-divider class="mt-1 mb-3 mx-3"></v-divider>
-                <v-btn class="white--text" color="rgb(225 48 108)" block small @click="register()">Register</v-btn>
+                <div class="mx-3">
+                  <v-btn class="white--text" color="deep-purple darken-2" block small :disabled="!valid" @click="login()">Login</v-btn>
+                  <v-divider class="mt-3 mb-1 mx-3"></v-divider>
+                  <div class="text-center"> - or - </div>
+                  <v-divider class="mt-1 mb-3 mx-3"></v-divider>
+                  <v-btn class="white--text" color="rgb(225 48 108)" block small @click="register()">Register</v-btn>
+                </div>
               </v-form>
             </v-card-text>
           </v-card>
@@ -83,7 +86,7 @@ export default {
           username: [
             v => !!v || 'Username is required',
             v => (v && v.length > 3) || 'A username must be more than 3 characters long',
-            v => /^[a-z0-9_]+$/.test(v) || 'A username can only contain letters and digits'
+            v => /^[a-zA-Z0-9_]+$/.test(v) || 'A username can only contain letters and digits'
           ],
           password: [
             v => !!v || 'Password is required',
@@ -98,6 +101,7 @@ export default {
             axios.post('http://localhost:8000/api-token-auth/', this.credentials).then(response => {
               this.$session.start();
               this.$session.set('token', response.data.token);
+              this.$session.set('current_user', this.credentials.username)
               this.$router.push('/feed');
             }).catch(e => {
               this.snackbar = true
@@ -114,6 +118,6 @@ export default {
 </script>
 <style>
 .instaColor {
-  background-color: rgb(225 48 108);
+  background-color: rgb(220 48 108);
 }
 </style>
