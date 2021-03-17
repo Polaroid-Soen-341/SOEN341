@@ -9,12 +9,14 @@
           New Post
         </v-card-title>
 
-        <v-file-input :rules="rules"
+        <v-file-input v-model="image"
+                      :rules="rules"
                       class="px-8"
                       accept="image/png, image/jpeg, image/bmp"
                       prepend-icon="mdi-camera"
                       label="Picture"/>
-        <v-textarea class="px-8"
+        <v-textarea v-model="comment"
+                    class="px-8"
                     prepend-inner-icon="mdi-comment"
                     counter
                     outlined
@@ -51,6 +53,8 @@
     props: ['showDialog'],
     data () {
       return {
+        image: null,
+        comment: '',
         rules: [
         value => !value || value.size < 2000000 || 'Avatar size should be less than 2 MB!',
       ]
@@ -58,9 +62,13 @@
     },
     methods: {
       saveClicked() {
+        this.comment = ''
+        this.image = null
         this.$emit('cancelClicked')
       },
       cancelClicked() {
+        this.comment = ''
+        this.image = null
         this.$emit('cancelClicked')
       }
     }
