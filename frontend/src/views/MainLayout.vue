@@ -3,12 +3,12 @@
         <v-navigation-drawer color="deep-purple darken-2" app v-model="drawer">
           <v-sheet color="grey lighten-4"
                    class="pa-4">
-            <v-avatar class="mb-4"
-                      color="grey darken-1"
-                      size="64">
+            <v-avatar
+                color="blue"
+                size="100">
+                <span class="white--text">{{ currentUser }}</span>
             </v-avatar>
-
-            <div>Username</div>
+            <div class="pt-2">{{ currentUser }}</div>
           </v-sheet>
 
           <v-divider></v-divider>
@@ -21,9 +21,9 @@
               <v-list-item v-for="(item, i) in items"
                            :key="i"
                            class="white--text"
-                           @click="redirect()">
+                           @click="redirect(item.path)">
                 <v-list-item-icon>
-                  <v-icon v-text="item.icon"></v-icon>
+                  <v-icon color="white" v-text="item.icon"></v-icon>
                 </v-list-item-icon>
 
                 <v-list-item-content class="white--text">
@@ -76,23 +76,33 @@
 export default {
   name: "MainLayout",
   mounted() {
-    this.checkLoggedIn();
+    this.checkLoggedIn()
+    this.loadUser()
   },
   data: () => ({
     drawer: null,
     selectedItem: null,
+    currentUser: '',
+    userFirstname: '',
+    userLastname: '',
     items: [
-      { id: 0, text: 'My Feed', path: 'feed', icon: 'mdi-view-list' },
-      { id: 1, text: 'My Posts', path: 'feed', icon: 'mdi-send' },
-      { id: 2, text: 'Notifications', path: 'feed', icon: 'mdi-bell' },
-      { id: 3, text: 'Settings', path: 'feed', icon: 'mdi-cog' }
+      { id: 0, text: 'My Feed', path: '/feed', icon: 'mdi-view-list' },
+      { id: 1, text: 'My Profile', path: '/myprofile', icon: 'mdi-account' },
+      { id: 2, text: 'My Connections', path: '/connections', icon: 'mdi-account-multiple-plus' },
+      { id: 3, text: 'Notifications', path: '/feed', icon: 'mdi-bell' },
+      { id: 4, text: 'Settings', path: '/myprofile', icon: 'mdi-cog' }
     ]
   }),
   methods: {
-    // redirect(){
-    //   console.log(this.items[this.selectedItem])
-    //   this.$router.push(this.items[this.selectedItem].path)
-    // },
+    redirect(path){
+      if(this.$router.history.current.path === path){
+        return
+      }
+      this.$router.push(path)
+    },
+    loadUser(){
+      this.currentUser = this.$session.get('current_user')
+    },
     checkLoggedIn() {
       this.$session.start();
       if (!this.$session.has("token")) {
