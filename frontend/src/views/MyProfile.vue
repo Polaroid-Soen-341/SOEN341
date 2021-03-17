@@ -12,21 +12,6 @@
               <div>
                 <div class="pb-2">
                   <span class="text-h5 headline px-4" align="left">Firstname Lastname</span>
-                  <v-btn class="white--text text-capitalize mx-2"
-                        small
-                        rounded
-                        color="blue"
-                        @click="follow()">
-                    Follow
-                  </v-btn>
-                  <v-btn class="white--text text-capitalize"
-                        small
-                        rounded
-                        outlined
-                        color="blue"
-                        @click="logout()">
-                    Unfollow
-                  </v-btn>
                 </div>
                   <span class="subtitle-2 pl-4" align="left">Followers: 0</span>
                   <span class="subtitle-2 pl-4" align="left">Following: 0</span>
@@ -54,6 +39,7 @@
                     :key="n"
                     class="d-flex child-flex"
                     cols="4">
+                    <div>
                     <v-img
                       :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"
                       :lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 10}`"
@@ -71,6 +57,16 @@
                         </v-row>
                       </template>
                     </v-img>
+                    </div>
+                    <!-- <div>
+                    <v-textarea
+                      style="position: absolute"
+                      class="mx-2"
+                      label="Comment"
+                      rows="1"
+                      prepend-icon="mdi-comment"
+                    ></v-textarea>
+                    </div> -->
                   </v-col>
                 </v-row>
               </v-container>

@@ -105,7 +105,7 @@
                                    rounded
                                    outlined
                                    color="blue"
-                                   @click="follow(row.item)">
+                                   @click="seeProfile(row.item)">
                               See Profile
                             </v-btn>
                           </td>
@@ -191,6 +191,10 @@ export default {
     },
     newPost() {
       this.showPostDialog = true
+    },
+    seeProfile(user) {
+      console.log(user)
+      this.$router.push('/userprofile')
     }
   },
   computed: {
