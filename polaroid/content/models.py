@@ -5,6 +5,7 @@ import uuid
 class Post(models.Model):
     title           = models.CharField(max_length=100, null=True)
     content         = models.TextField(null=True)
+    likes           = models.IntegerField(default=0)
     date            = models.DateTimeField(auto_now_add=True)
     owner           = models.ForeignKey(User, related_name='posts', on_delete=models.CASCADE, null=False)
     id              = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -25,7 +26,7 @@ class Comment(models.Model):
         return self.content
 
 class Picture(models.Model):
-    title           = models.CharField(max_length=100, null=True)
+    title           = models.CharField(max_length=100, null=True, blank=True)
     picture         = models.ImageField(null=True)
     date            = models.DateTimeField(auto_now_add=True)
     post            = models.ForeignKey(Post, on_delete=models.CASCADE, null=False, related_name="pictures")
