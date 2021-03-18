@@ -23,10 +23,15 @@ class UserCreate(generics.CreateAPIView):
     permission_classes = (AllowAny, )
 
 class UserAuth(generics.ListAPIView):
-    queryset = User.objects.all().order_by('fullname')
+    queryset = User.objects.all().order_by('lastName')
     serializer_class = serializers.RegisterUserSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
+class GetUsers(generics.ListAPIView):
+    User = get_user_model()
+    queryset = User.objects.all()
+    serializer_class = serializers.RegisterUserSerializer
+    permission_classes = (AllowAny, )
 
 
 

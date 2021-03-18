@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, \
     PermissionsMixin
 
+#manages the creation of ether a normal user or a superuser
 class UserManager(BaseUserManager):
 
     def create_user(self, email, username, password=None, **extra_fields):
@@ -18,6 +19,7 @@ class UserManager(BaseUserManager):
 
         return user
 
+    
     def create_superuser(self, email, username, password):
         user = self.create_user(email, username, password)
         user.is_staff = True
@@ -28,10 +30,12 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    username = models.CharField(max_length=30, unique=True)
-    email = models.EmailField(max_length=255, unique=True)
-    fullname = models.CharField(max_length=60, blank=True)
-    bio = models.TextField(blank=True)
+    username = models.CharField(max_length=20, unique=True)
+    email = models.EmailField(unique=True)
+    firstName = models.CharField(max_length=20)
+    lastName = models.CharField(max_length=20)
+    birthday = models.DateField(blank=True, null=True)
+
     followers = models.ManyToManyField(settings.AUTH_USER_MODEL,
                                        related_name="user_followers",
                                        blank=True,
