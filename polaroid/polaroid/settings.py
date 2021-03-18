@@ -37,6 +37,7 @@ CORS_ALLOWED_ORIGINS = [
 
 INSTALLED_APPS = [
     'api_auth.apps.ApiAuthConfig',
+    'content.apps.ContentConfig',
 
     'django.contrib.admin',
     'django.contrib.auth',
