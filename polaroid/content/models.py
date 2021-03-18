@@ -17,6 +17,7 @@ class Comment(models.Model):
     date            = models.DateTimeField(auto_now_add=True)
     post            = models.ForeignKey(Post, on_delete=models.CASCADE, null=False, related_name="comments")
     parent_comment  = models.ForeignKey('self', on_delete=models.CASCADE, related_name="replies", null=True)
+    likes           = models.IntegerField(default=0)
     owner           = models.ForeignKey(User, related_name='comments', on_delete=models.CASCADE, null=False)
     id              = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
