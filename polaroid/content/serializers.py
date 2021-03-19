@@ -1,7 +1,6 @@
 from django.contrib.auth.models import User, Group
 from .models import Post, Comment
 from rest_framework import serializers
-
         
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:

@@ -3,9 +3,12 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model  
 from .models import User, UserManager
 
-
+class SubUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'id')
 class UserSerializer(serializers.ModelSerializer):
-    following = serializer(many=True)
+    following = SubUserSerializer(many=True)
     class Meta:
         model = User 
         fields = (

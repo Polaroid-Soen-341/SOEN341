@@ -36,8 +36,10 @@ def follow_user(request, username):
         return Response(status=status.HTTP_400_BAD_REQUEST)
     
     following = instance.following.all()
-    if instance not in following:
+    if user_to_follow[0] not in following:
         instance.following.add(user_to_follow[0])
+    else:
+        instance.following.remove(user_to_follow[0])
 
     serializer = serializers.UserSerializer(instance, data=request.data, partial=True)
     if serializer.is_valid(raise_exception=False):
