@@ -12,6 +12,7 @@ from .models import User
 
 class GenericUserView():
     serializer_class = serializers.UserSerializer
+    queryset = User.objects.all()
 
     def get_queryset(self):
         return User.objects.all()
@@ -27,7 +28,6 @@ class GetUsers(GenericUserView, generics.ListAPIView):
 
 
 @api_view(['GET'])
-@authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes([IsAuthenticated])
 def follow_user(request, username):
     instance = request.user
