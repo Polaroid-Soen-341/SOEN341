@@ -38,7 +38,8 @@ class User(AbstractBaseUser, PermissionsMixin):
                             'self',
                             related_name="user_following",
                             null=True,
-                            blank=True
+                            blank=True,
+                            symmetrical=False
                         )
     
     is_active           = models.BooleanField(default=True)
