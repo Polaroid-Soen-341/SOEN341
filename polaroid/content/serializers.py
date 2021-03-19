@@ -1,21 +1,17 @@
 from django.contrib.auth.models import User, Group
-from .models import Post, Comment, Picture
+from .models import Post, Comment
+from api_auth.serializers import UserSerializer
 from rest_framework import serializers
 
         
 class CommentSerializer(serializers.ModelSerializer):
+    like = UserSerializer(read_only = True, many = True)
     class Meta:
         model = Comment
-        fields = ['post', 'content', 'date', 'id', 'parent_comment', 'comment_likes']
-        
-class PictureSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Picture
-        fields = ['post', 'title', 'date', 'picture', 'id']
+        fields = ['post', 'content', 'date', 'id', 'parent_comment','like']
         
 class PostSerializer(serializers.ModelSerializer):
     comments = CommentSerializer(many=True, read_only=True)
-    pictures = PictureSerializer(many=True, read_only=True)
     class Meta:
         model = Post
-        fields = ['title', 'content', 'post_likes', 'date', 'id', 'comments', 'replies', 'pictures']
+        fields = ['title', 'description', 'date', 'id', "comments", "picture"]

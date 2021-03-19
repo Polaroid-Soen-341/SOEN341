@@ -1,10 +1,12 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.contrib.auth.models import User
 from rest_framework import generics, permissions
 from . import serializers
 from . import models
 from .permissions import IsOwnerOrReadOnly
 
+# List create views
 class GenericContentListCreate(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
@@ -28,11 +30,7 @@ class CommentListCreate(GenericContentListCreate):
     def get_base_model(self):
         return models.Comment
 
-class PicturesListCreate(GenericContentListCreate):
-    serializer_class = serializers.PictureSerializer
-    def get_base_model(self):
-        return models.Picture
-
+# Retrieve views
 class GenericContentView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
@@ -53,7 +51,30 @@ class CommentInfo(GenericContentView):
     def get_base_model(self):
         return models.Comment
 
-class PictureInfo(GenericContentView):
-    serializer_class = serializers.PictureSerializer
+# List user content views
+class GenericUserList(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+
     def get_base_model(self):
-        return models.Picture
+        raise NotImplementedError()
+
+    def get_queryset(self):
+        usr = None
+        try:
+            usr = User.objects.filter(username=self.kwargs['pk'])
+            if len(usr) < 1:
+                return []
+            queryset = self.get_base_model().objects.filter(owner=usr[0])
+            return queryset
+        except:
+            return []
+
+class PostUserInfo(GenericUserList):
+    serializer_class = serializers.PostSerializer
+    def get_base_model(self):
+        return models.Post
+
+class CommentUserInfo(GenericUserList):
+    serializer_class = serializers.CommentSerializer
+    def get_base_model(self):
+        return models.Comment
