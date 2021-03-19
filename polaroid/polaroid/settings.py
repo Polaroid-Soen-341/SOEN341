@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'corsheaders',
 
 ]
+
 AUTH_USER_MODEL = 'api_auth.User'
 
 REST_FRAMEWORK = {
