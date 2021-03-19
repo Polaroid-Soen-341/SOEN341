@@ -6,7 +6,7 @@ from rest_framework import serializers
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = ['post', 'content', 'date', 'id', 'parent_comment', 'likes']
+        fields = ['post', 'content', 'date', 'id', 'parent_comment', 'comment_likes']
         
 class PictureSerializer(serializers.ModelSerializer):
     class Meta:
@@ -18,4 +18,4 @@ class PostSerializer(serializers.ModelSerializer):
     pictures = PictureSerializer(many=True, read_only=True)
     class Meta:
         model = Post
-        fields = ['title', 'content', 'likes', 'date', 'id', "comments", "pictures"]
+        fields = ['title', 'content', 'post_likes', 'date', 'id', 'comments', 'replies', 'pictures']
