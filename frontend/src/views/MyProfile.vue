@@ -84,7 +84,7 @@
 
 <script>
 import NewPostDialog from '../components/NewPostDialog'
-import axios from 'axios';
+//import axios from 'axios';
 export default {
   name: 'MyProfile',
   components: {
@@ -107,16 +107,16 @@ export default {
       this.showPostDialog = true
     },
     fetchPosts() {
-      this.loading = true;
-      axios.get('http://localhost:8000/content/post/id').then(response => {
-         this.allPosts = response.data
-         console.log(this.allPosts)
-         this.snackbarApproved = true
-       }).catch(e => {
-         this.snackbarError = true
-         this.loading = false
-         console.log(e)
-       })
+      // this.loading = true;
+      // axios.get('http://localhost:8000/content/post/id').then(response => {
+      //    this.allPosts = response.data
+      //    console.log(this.allPosts)
+      //    this.snackbarApproved = true
+      //  }).catch(e => {
+      //    this.snackbarError = true
+      //    this.loading = false
+      //    console.log(e)
+      //  })
     }
   },
   computed: {

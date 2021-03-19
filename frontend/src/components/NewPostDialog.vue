@@ -9,13 +9,21 @@
           New Post
         </v-card-title>
 
-        <v-file-input v-model="newPost.image"
+        <!-- <v-file-input v-model="newPost.image"
                       :rules="rules"
                       class="px-8"
                       accept="image/png, image/jpeg, image/bmp"
                       prepend-icon="mdi-camera"
-                      label="Picture"/>
-        <v-textarea v-model="newPost.comment"
+                      label="Picture"/> -->
+                      <v-textarea v-model="newPost.title"
+                    class="px-8"
+                    prepend-inner-icon="mdi-comment"
+                    counter
+                    outlined
+                    name="input-7-4"
+                    label="Comment on post"
+        ></v-textarea>
+        <v-textarea v-model="newPost.content"
                     class="px-8"
                     prepend-inner-icon="mdi-comment"
                     counter
@@ -66,7 +74,8 @@ export default {
   methods: {
     saveClicked() {
       this.loading = true;
-      axios.post('http://localhost:8000/content/post/', this.newPost).then(response => {
+      var token = this.$session.get('token')
+      axios.post('http://localhost:8000/content/post/', this.newPost, {headers: {Authorization: 'JWT ' + token,}}).then(response => {
         console.log(response.data)
         }).catch(e => {
         this.loading = false
