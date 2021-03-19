@@ -7,11 +7,11 @@
               <v-avatar
                 color="blue"
                 size="100">
-                <span class="white--text">USER</span>
+                <span class="white--text">{{ currentUser }}</span>
               </v-avatar>
               <div>
                 <div class="pb-2">
-                  <span class="text-h5 headline px-4" align="left">Firstname Lastname</span>
+                  <span class="text-h5 headline px-4" align="left">{{ currentUser }}</span>
                 </div>
                   <span class="subtitle-2 pl-4" align="left">Followers: 0</span>
                   <span class="subtitle-2 pl-4" align="left">Following: 0</span>
@@ -35,14 +35,15 @@
               <v-container>
                 <v-row>
                   <v-col
-                    v-for="n in 9"
-                    :key="n"
+                    v-for="post in myPosts"
+                    :key="post.id"
                     class="d-flex child-flex"
                     cols="4">
                     <div>
+                      {{ post.description }}
                     <v-img
-                      :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"
-                      :lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 10}`"
+                      :src="post.picture"
+                      :lazy-src="post.picture"
                       aspect-ratio="1"
                       class="grey lighten-2">
                       <template v-slot:placeholder>
@@ -84,42 +85,38 @@
 
 <script>
 import NewPostDialog from '../components/NewPostDialog'
-//import axios from 'axios';
+import axios from 'axios';
 export default {
   name: 'MyProfile',
   components: {
     NewPostDialog
   },
   data: () => ({
+    currentUser: '',
       myPosts: {},
       loading: false,
-      snackbarError: false,
-      errorMessage: 'Unable to post!',
-      snackbarApproved: false,
-      approvedMessage: 'New post successfully created!',
-      timeout: 5000,
-      showPostDialog: false,
-      allUsers: null,
-      allPosts: null
+      showPostDialog: false
   }),
   methods: {
     newPost() {
       this.showPostDialog = true
     },
     fetchPosts() {
-      // this.loading = true;
-      // axios.get('http://localhost:8000/content/post/id').then(response => {
-      //    this.allPosts = response.data
-      //    console.log(this.allPosts)
-      //    this.snackbarApproved = true
-      //  }).catch(e => {
-      //    this.snackbarError = true
-      //    this.loading = false
-      //    console.log(e)
-      //  })
+      this.showPostDialog = false
+      axios.get('http://localhost:8000/content/post/user/' + this.currentUser).then(response => {
+         this.myPosts = response.data
+         console.log(this.myPosts)
+       }).catch(e => {
+         console.log(e)
+       })
+    },
+    loadUser(){
+      this.currentUser = this.$session.get('current_user')
     }
   },
-  computed: {
-  }
+  mounted() {
+    this.loadUser()
+    this.fetchPosts()
+  },
 }
 </script>
