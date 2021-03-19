@@ -37,7 +37,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     following           = models.ManyToManyField(
                             'self',
                             related_name="user_following",
-                            null=True,
                             blank=True,
                             symmetrical=False
                         )
