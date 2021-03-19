@@ -74,7 +74,8 @@
           </v-card>
 
           <NewPostDialog :showDialog="showPostDialog"
-                         @cancelClicked="showPostDialog = false"/>
+                         @cancelClicked="showPostDialog = false"
+                         @saveClicked="fetchPosts()"/>
 
         </v-flex>
       </v-layout>
@@ -83,13 +84,14 @@
 
 <script>
 import NewPostDialog from '../components/NewPostDialog'
-// import axios from 'axios';
+//import axios from 'axios';
 export default {
   name: 'MyProfile',
   components: {
     NewPostDialog
   },
   data: () => ({
+      myPosts: {},
       loading: false,
       snackbarError: false,
       errorMessage: 'Unable to post!',
@@ -97,23 +99,24 @@ export default {
       approvedMessage: 'New post successfully created!',
       timeout: 5000,
       showPostDialog: false,
-      allUsers: null
+      allUsers: null,
+      allPosts: null
   }),
   methods: {
-    follow() {
-      // this.loading = true;
-      // axios.get('http://localhost:8000/api-auth/user/getAll').then(response => {
-      //   this.allUsers = response.data
-      //   console.log(this.allUsers)
-      //   this.snackbarApproved = true
-      // }).catch(e => {
-      //   this.snackbarError = true
-      //   this.loading = false
-      //   console.log(e)
-      // })
-    },
     newPost() {
       this.showPostDialog = true
+    },
+    fetchPosts() {
+      // this.loading = true;
+      // axios.get('http://localhost:8000/content/post/id').then(response => {
+      //    this.allPosts = response.data
+      //    console.log(this.allPosts)
+      //    this.snackbarApproved = true
+      //  }).catch(e => {
+      //    this.snackbarError = true
+      //    this.loading = false
+      //    console.log(e)
+      //  })
     }
   },
   computed: {
