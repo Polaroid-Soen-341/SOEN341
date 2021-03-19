@@ -2,7 +2,6 @@ from django.contrib.auth.models import User, Group
 from .models import Post, Comment
 from api_auth.serializers import UserSerializer
 from rest_framework import serializers
-
         
 class CommentSerializer(serializers.ModelSerializer):
     like = UserSerializer(read_only = True, many = True)
