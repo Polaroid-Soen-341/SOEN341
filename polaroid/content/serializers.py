@@ -10,7 +10,8 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = ['post', 'content', 'date', 'id', 'parent_comment','like']
         
 class PostSerializer(serializers.ModelSerializer):
-    comments = CommentSerializer(many=True, read_only=True)
+    comments = CommentSerializer(many=True, read_only=True, required=False)
+    like = UserSerializer(read_only = True, many = True, required=False)
     class Meta:
         model = Post
-        fields = ['title', 'description', 'date', 'id', "comments", "picture"]
+        fields = ['title', 'description', 'date', 'id', "comments", "picture", "like"]

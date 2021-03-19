@@ -152,6 +152,7 @@ export default {
     NewPostDialog
   },
   data: () => ({
+      currentUser: '',
       tab: null,
       search: '',
       users: [],
@@ -187,7 +188,22 @@ export default {
       })
     },
     follow(user) {
-      console.log(user)
+      var token = this.$session.get('token')
+      axios.get('http://localhost:8000/api-auth/user/follow/' + user.username, {headers: {Authorization: 'JWT ' + token}}).then(response => {
+        console.log(response.data)
+      }).catch(e => {
+        console.log(e)
+      })
+      this.myConnections()
+    },
+    myConnections() {
+      var token = this.$session.get('token')
+      axios.get('http://localhost:8000/api-auth/user/following/', {headers: {Authorization: 'JWT ' + token}}).then(response => {
+        this.connections = response.data
+        console.log(response.data)
+      }).catch(e => {
+        console.log(e)
+      })
     },
     newPost() {
       this.showPostDialog = true
@@ -195,12 +211,17 @@ export default {
     seeProfile(user) {
       console.log(user)
       this.$router.push('/userprofile')
+    },
+    loadUser(){
+      this.currentUser = this.$session.get('current_user')
     }
   },
   computed: {
   },
   mounted() {
     this.getAllUsers()
+    this.loadUser()
+    this.myConnections()
   }
 }
 </script>
