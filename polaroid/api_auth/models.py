@@ -30,8 +30,8 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     username            = models.CharField(max_length=20, unique=True)
     email               = models.EmailField(unique=True)
-    firstName           = models.CharField(max_length=20)
-    lastName            = models.CharField(max_length=20)
+    first_name          = models.CharField(max_length=20)
+    last_name           = models.CharField(max_length=20)
     birthday            = models.DateField(blank=True, null=True)
 
     following           = models.ManyToManyField(

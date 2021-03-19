@@ -12,6 +12,7 @@ from .models import User
 
 class GenericUserView():
     serializer_class = serializers.UserSerializer
+    queryset = User.objects.all()
 
     def get_queryset(self):
         return User.objects.all()
