@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User, Group
-from .models import Post, Comment, Picture
+from .models import Post, Comment
 from rest_framework import serializers
 
         
@@ -8,14 +8,8 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
         fields = ['post', 'content', 'date', 'id']
         
-class PictureSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Picture
-        fields = ['post', 'title', 'date', 'picture', 'id']
-        
 class PostSerializer(serializers.ModelSerializer):
     comments = CommentSerializer(many=True, read_only=True)
-    pictures = PictureSerializer(many=True, read_only=True)
     class Meta:
         model = Post
-        fields = ['title', 'content', 'date', 'id', "comments", "pictures"]
+        fields = ['title', 'description', 'date', 'id', "comments", "picture"]
