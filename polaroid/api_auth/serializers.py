@@ -1,11 +1,29 @@
-from django.contrib.auth.models import User, Group
+from rest_framework.settings import api_settings
 from rest_framework import serializers
+from django.contrib.auth import get_user_model  
+from .models import User, UserManager
 
-class UserSerializer(serializers.ModelSerializer):
+class SubUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('username', 'password', 'email', 'first_name', 'last_name')
-        extra_kwargs = {'password': {'write_only': True}}
+        fields = ('username', 'email', 'id')
+class UserSerializer(serializers.ModelSerializer):
+    following = SubUserSerializer(many=True)
+    class Meta:
+        model = User 
+        fields = (
+            'id', 
+            'email', 
+            'username',
+            'firstName', 
+            'lastName', 
+            'birthday', 
+            'password', 
+            'following', 
+            'is_active',
+            'is_staff',
+            'date_joined'
+        )
 
     def create(self, validated_data):
         password = validated_data.pop('password')
@@ -13,5 +31,3 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         return user
-
-        #add email must need to add email 
