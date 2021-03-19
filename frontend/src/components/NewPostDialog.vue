@@ -9,27 +9,19 @@
           New Post
         </v-card-title>
 
-        <!-- <v-file-input v-model="newPost.image"
+        <v-file-input v-model="newPost.image"
                       :rules="rules"
                       class="px-8"
                       accept="image/png, image/jpeg, image/bmp"
                       prepend-icon="mdi-camera"
-                      label="Picture"/> -->
-                      <v-textarea v-model="newPost.title"
+                      label="Picture"/>
+        <v-textarea v-model="newPost.description"
                     class="px-8"
                     prepend-inner-icon="mdi-comment"
                     counter
                     outlined
                     name="input-7-4"
-                    label="Comment on post"
-        ></v-textarea>
-        <v-textarea v-model="newPost.content"
-                    class="px-8"
-                    prepend-inner-icon="mdi-comment"
-                    counter
-                    outlined
-                    name="input-7-4"
-                    label="Comment on post"
+                    label="Description"
         ></v-textarea>
 
         <v-divider></v-divider>
