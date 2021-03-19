@@ -194,10 +194,11 @@ export default {
       }).catch(e => {
         console.log(e)
       })
+      this.myConnections()
     },
     myConnections() {
       var token = this.$session.get('token')
-      axios.get('http://localhost:8000/api-auth/user/following/' + this.currentUser, {headers: {Authorization: 'JWT ' + token}}).then(response => {
+      axios.get('http://localhost:8000/api-auth/user/following/', {headers: {Authorization: 'JWT ' + token}}).then(response => {
         this.connections = response.data
         console.log(response.data)
       }).catch(e => {

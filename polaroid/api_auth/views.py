@@ -28,7 +28,6 @@ class GetUsers(GenericUserView, generics.ListAPIView):
 
 
 @api_view(['GET'])
-@authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes([IsAuthenticated])
 def follow_user(request, username):
     instance = request.user
