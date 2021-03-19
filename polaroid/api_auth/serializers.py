@@ -8,22 +8,18 @@ class SubUserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('username', 'email', 'id')
 class UserSerializer(serializers.ModelSerializer):
-    following = SubUserSerializer(many=True)
+    following = SubUserSerializer(many=True, required=False)
     class Meta:
         model = User 
         fields = (
-            'id', 
             'email', 
             'username',
-            'firstName', 
-            'lastName', 
-            'birthday', 
+            'first_name', 
+            'last_name', 
             'password', 
-            'following', 
-            'is_active',
-            'is_staff',
-            'date_joined'
+            'following'
         )
+        extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
         password = validated_data.pop('password')
