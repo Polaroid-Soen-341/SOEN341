@@ -34,16 +34,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     lastName            = models.CharField(max_length=20)
     birthday            = models.DateField(blank=True, null=True)
 
-    followers           = models.ForeignKey(
+    following           = models.ManyToManyField(
                             'self',
-                            on_delete=models.PROTECT,
-                            related_name="user_followers",
-                            null=True,
-                            blank=True
-                        )
-    following           = models.ForeignKey(
-                            'self',
-                            on_delete=models.PROTECT,
                             related_name="user_following",
                             null=True,
                             blank=True

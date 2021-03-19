@@ -5,6 +5,7 @@ from .models import User, UserManager
 
 
 class UserSerializer(serializers.ModelSerializer):
+    following = serializer(many=True)
     class Meta:
         model = User 
         fields = (
@@ -16,7 +17,6 @@ class UserSerializer(serializers.ModelSerializer):
             'birthday', 
             'password', 
             'following', 
-            'followers', 
             'is_active',
             'is_staff',
             'date_joined'
