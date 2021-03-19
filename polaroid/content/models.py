@@ -12,7 +12,7 @@ class Post(models.Model):
     id              = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     def __str__(self):
-        return self.title
+        return str(self.title)
 
 class Comment(models.Model):
     content         = models.TextField(null=True)
@@ -24,4 +24,4 @@ class Comment(models.Model):
     id              = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     def __str__(self):
-        return self.content
+        return str(self.content)
