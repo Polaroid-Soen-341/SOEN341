@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.contrib.auth.models import User
+from api_auth.models import User
 from rest_framework import generics, permissions
 from . import serializers
 from . import models
@@ -62,6 +62,7 @@ class GenericUserList(generics.ListAPIView):
         usr = None
         try:
             usr = User.objects.filter(username=self.kwargs['pk'])
+            print(usr)
             if len(usr) < 1:
                 return []
             queryset = self.get_base_model().objects.filter(owner=usr[0])
