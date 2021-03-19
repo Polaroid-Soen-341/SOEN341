@@ -57,3 +57,6 @@ class PictureInfo(GenericContentView):
     serializer_class = serializers.PictureSerializer
     def get_base_model(self):
         return models.Picture
+
+class PostUser(GenericContentView):
+    pass

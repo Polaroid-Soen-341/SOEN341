@@ -18,4 +18,4 @@ class PostSerializer(serializers.ModelSerializer):
     pictures = PictureSerializer(many=True, read_only=True)
     class Meta:
         model = Post
-        fields = ['title', 'content', 'date', 'id', "comments", "pictures"]
+        fields = ['title', 'description', 'date', 'id', "comments", "pictures"]

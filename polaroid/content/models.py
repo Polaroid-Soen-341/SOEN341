@@ -4,7 +4,7 @@ import uuid
 
 class Post(models.Model):
     title           = models.CharField(max_length=100, null=True)
-    content         = models.TextField(null=True)
+    description     = models.TextField(null=True)
     date            = models.DateTimeField(auto_now_add=True)
     owner           = models.ForeignKey(User, related_name='posts', on_delete=models.CASCADE, null=False)
     id              = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
