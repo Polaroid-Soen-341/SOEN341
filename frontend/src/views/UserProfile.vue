@@ -7,11 +7,11 @@
               <v-avatar
                 color="blue"
                 size="100">
-                <span class="white--text">USER</span>
+                <span class="white--text">{{ user }}</span>
               </v-avatar>
               <div>
                 <div class="pb-2">
-                  <span class="text-h5 headline px-4" align="left">Firstname Lastname</span>
+                  <span class="text-h5 headline px-4" align="left">{{ userInfo.first_name }} {{ userInfo.last_name }}</span>
                   <v-btn class="white--text text-capitalize mx-2"
                         small
                         rounded
@@ -29,7 +29,7 @@
                   </v-btn>
                 </div>
                   <span class="subtitle-2 pl-4" align="left">Followers: 0</span>
-                  <span class="subtitle-2 pl-4" align="left">Following: 0</span>
+                  <span class="subtitle-2 pl-4" align="left">Following: {{ userInfo.following.length }}</span>
               </div>
             </v-card-title>
 
@@ -39,15 +39,18 @@
               <v-container>
                 <v-row>
                   <v-col
-                    v-for="n in 9"
-                    :key="n"
+                    v-for="post in userPosts"
+                    :key="post.id"
                     class="d-flex child-flex"
                     cols="4">
+                    <div>
+                      {{ post.description }}
                     <v-img
-                      :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"
-                      :lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 10}`"
+                      :src="post.picture"
+                      :lazy-src="post.picture"
                       aspect-ratio="1"
-                      class="grey lighten-2">
+                      class="grey lighten-2"
+                      @click="postDetails(post)">
                       <template v-slot:placeholder>
                         <v-row
                           class="fill-height ma-0"
@@ -60,14 +63,27 @@
                         </v-row>
                       </template>
                     </v-img>
+                    </div>
+                    <!-- <div>
+                    <v-textarea
+                      style="position: absolute"
+                      class="mx-2"
+                      label="Comment"
+                      rows="1"
+                      prepend-icon="mdi-comment"
+                    ></v-textarea>
+                    </div> -->
                   </v-col>
                 </v-row>
               </v-container>
             </v-card-text>
           </v-card>
 
-          <NewPostDialog :showDialog="showPostDialog"
-                         @cancelClicked="showPostDialog = false"/>
+          <ViewPostDialog :showDialog="showPostDetails"
+                          :postDetails="allPostDetails"
+                          :user="currentUser"
+                         @cancelClicked="showPostDetails = false"
+                         @saveClicked="showPostDetails = false"/>
 
         </v-flex>
       </v-layout>
@@ -75,22 +91,20 @@
 </template>
 
 <script>
-import NewPostDialog from '../components/NewPostDialog'
-// import axios from 'axios';
+import axios from 'axios';
+import ViewPostDialog from '../components/ViewPostDialog'
 export default {
-  name: 'MyProfile',
+  name: 'UserProfile',
   components: {
-    NewPostDialog
+    ViewPostDialog
   },
   data: () => ({
       loading: false,
-      snackbarError: false,
-      errorMessage: 'Unable to post!',
-      snackbarApproved: false,
-      approvedMessage: 'New post successfully created!',
-      timeout: 5000,
-      showPostDialog: false,
-      allUsers: null
+      userPosts: {},
+      user: null,
+      userInfo: null,
+      showPostDetails: false,
+      allPostDetails: {}
   }),
   methods: {
     follow() {
@@ -105,11 +119,29 @@ export default {
       //   console.log(e)
       // })
     },
-    newPost() {
-      this.showPostDialog = true
+    fetchPosts() {
+      this.showPostDialog = false
+      axios.get('http://localhost:8000/content/post/user/' + this.user).then(response => {
+         this.userPosts = response.data
+         console.log(this.userPosts)
+       }).catch(e => {
+         console.log(e)
+       })
+    },
+    postDetails(post) {
+      console.log(post)
+      this.allPostDetails = post
+      this.showPostDetails = true
+    },
+    loadUser(){
+      this.userInfo = this.$route.query.userprofile
+      this.user = this.userInfo.username
+      console.log(this.userInfo)
     }
   },
-  computed: {
-  }
+  mounted() {
+    this.loadUser()
+    this.fetchPosts()
+  },
 }
 </script>
