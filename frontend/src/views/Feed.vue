@@ -12,7 +12,7 @@
                     <div v-for="post in feedPosts"
                     :key="post.id">
                     <v-divider class="mt-1 mb-1"></v-divider>
-                    <v-card-title>{{ currentUser }}</v-card-title>
+                    <v-card-title>{{ post.owner.username }}</v-card-title>
                     <div class="px-4">
                       <v-img
                         :src="post.picture"
@@ -49,7 +49,7 @@
                       20 Likes
                     </div>
                     <div class="px-4 pb-2">
-                      <strong>{{ currentUser }}</strong> - {{ post.description }}
+                      <strong>{{ post.owner.username }}</strong> - {{ post.description }}
                     </div>
                     <div class="px-4">
                       <v-textarea
@@ -67,7 +67,7 @@
                     <div v-for="comment in post.comments"
                          :key="comment.id"
                          class="px-4">
-                         <strong>{{ currentUser }}</strong> - {{ comment.content }}
+                         <strong>{{ comment.owner.username }}</strong> - {{ comment.content }}
                     </div>
                     </div>
                 </v-card>
@@ -97,7 +97,7 @@ export default {
     },
     fetchPosts() {
       this.showPostDialog = false
-      axios.get('http://localhost:8000/content/post/user/' + this.currentUser).then(response => {
+      axios.get('http://localhost:8000/content/post').then(response => {
          this.feedPosts = response.data
          console.log(this.feedPosts)
        }).catch(e => {
