@@ -1,27 +1,7 @@
 language: python
-dist: xenial
-python:
-- 3.9.1
-#command to instal dependencies
-before_install:
-- cd polaroid && python3 manage.py makemigrations api_auth
-- cd polaroid && python3 manage.py makemigrations content
-- cd polaroid && python3 manage.py makemigrations polaroid
 
-install:
-- pip install -r requirements.txt
+services:
+  - docker
 
-#command to run tests
 script:
-- cd polaroid && pytest
-
-#deployment specifications
-#testing
-deploy: 
-  provider: pages
-  skip-cleanup: true
-  github-token: $GITHUB_TOKEN
-  keep_history: true
-
-  on: 
-    branch: develop
+  - docker run -ti -v $(pwd):/app thelastbilly/polaroid /app/run_tests.sh
