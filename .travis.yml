@@ -7,7 +7,7 @@ install:
 
 #command to run tests
 script:
-- pytest
+- cd polaroid && python3 manage.py test
 
 #deployment specifications
 #testing
