@@ -45,7 +45,8 @@
                       :src="post.picture"
                       :lazy-src="post.picture"
                       aspect-ratio="1"
-                      class="grey lighten-2">
+                      class="grey lighten-2"
+                      @click="postDetails(post)">
                       <template v-slot:placeholder>
                         <v-row
                           class="fill-height ma-0"
@@ -77,6 +78,12 @@
           <NewPostDialog :showDialog="showPostDialog"
                          @cancelClicked="showPostDialog = false"
                          @saveClicked="fetchPosts()"/>
+          
+          <ViewPostDialog :showDialog="showPostDetails"
+                          :postDetails="allPostDetails"
+                          :user="currentUser"
+                         @cancelClicked="showPostDetails = false"
+                         @saveClicked="showPostDetails = false"/>
 
         </v-flex>
       </v-layout>
@@ -85,21 +92,30 @@
 
 <script>
 import NewPostDialog from '../components/NewPostDialog'
+import ViewPostDialog from '../components/ViewPostDialog'
 import axios from 'axios';
 export default {
   name: 'MyProfile',
   components: {
-    NewPostDialog
+    NewPostDialog,
+    ViewPostDialog
   },
   data: () => ({
     currentUser: '',
-      myPosts: {},
-      loading: false,
-      showPostDialog: false
+    myPosts: {},
+    loading: false,
+    showPostDialog: false,
+    showPostDetails: false,
+    allPostDetails: {}
   }),
   methods: {
     newPost() {
       this.showPostDialog = true
+    },
+    postDetails(post) {
+      console.log(post)
+      this.allPostDetails = post
+      this.showPostDetails = true
     },
     fetchPosts() {
       this.showPostDialog = false

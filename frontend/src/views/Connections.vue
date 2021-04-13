@@ -58,7 +58,7 @@
                                    rounded
                                    outlined
                                    color="blue"
-                                   @click="follow(row.item)">
+                                   @click="seeProfile(row.item)">
                               See Profile
                             </v-btn>
                           </td>
@@ -210,7 +210,9 @@ export default {
     },
     seeProfile(user) {
       console.log(user)
-      this.$router.push('/userprofile')
+      this.$router.push({
+            path: '/userprofile',
+            query: { userprofile: user }})
     },
     loadUser(){
       this.currentUser = this.$session.get('current_user')
