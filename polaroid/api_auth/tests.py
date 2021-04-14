@@ -5,7 +5,7 @@ from .models import *
 # Create your tests here.
 class UserCreationTestCase(PolaroidUserTest):
     def setUp(self):
-        self.create_default_test_user()
+        self.create_default_test_user("uctc")
 
     def test_user_were_created(self):
         """Test that user was created"""
@@ -13,6 +13,7 @@ class UserCreationTestCase(PolaroidUserTest):
         err_msg = ""
         try:
             owner = User.objects.get(username=self.username)
+            owner.full_clean()
         except Exception as e:
             err_msg = str(e)
             owner = None
@@ -23,10 +24,40 @@ class UserCreationTestCase(PolaroidUserTest):
         self.assertEqual(owner.is_superuser,False,"Super User False")
         self.assertEqual(owner.username,self.username,"username match")
         self.assertEqual(owner.email,self.email,"email match")
+    
+    def test_username_lenght(self):
+        user = ...
+        try:
+            toolong= 'x'*120
+            user = self.create_default_test_user(username=toolong)
+            user.full_clean()
+        except:
+            user = None
+        self.assertEqual(user, None, "user was created")
+        
+    def test_firstname_lenght(self):
+        user = ...
+        try:
+            toolong= 'x'*120
+            user = self.create_default_test_user(username=self.username+"f", first_name=toolong)
+            user.full_clean()
+        except:
+            user = None
+        self.assertEqual(user, None, "user was created")
+        
+    def test_lastname_lenght(self):
+        user = ...
+        try:
+            toolong= 'x'*120
+            user = self.create_default_test_user(username=self.username+"l", last_name=toolong)
+            user.full_clean()
+        except:
+            user = None
+        self.assertEqual(user, None, "user was created")
 
 class SuperUserCreationTestCase(PolaroidUserTest):
     def setUp(self):
-        self.create_default_test_superuser()
+        self.create_default_test_superuser("suctc")
 
     def test_user_were_created(self):
         """Test that user was created"""
@@ -34,6 +65,7 @@ class SuperUserCreationTestCase(PolaroidUserTest):
         err_msg = ""
         try:
             owner = User.objects.get(username=self.username)
+            owner.full_clean()
         except Exception as e:
             err_msg = str(e)
             owner = None
@@ -44,3 +76,33 @@ class SuperUserCreationTestCase(PolaroidUserTest):
         self.assertEqual(owner.is_superuser,True,"Super User true")
         self.assertEqual(owner.username,self.username,"username match")
         self.assertEqual(owner.email,self.email,"email match")
+    
+    def test_username_lenght(self):
+        user = ...
+        try:
+            toolong= 'x'*120
+            user = self.create_default_test_user(username=toolong)
+            user.full_clean()
+        except:
+            user = None
+        self.assertEqual(user, None, "user was created")
+        
+    def test_firstname_lenght(self):
+        user = ...
+        try:
+            toolong= 'x'*120
+            user = self.create_default_test_user(username=self.username+"f", first_name=toolong)
+            user.full_clean()
+        except:
+            user = None
+        self.assertEqual(user, None, "user was created")
+        
+    def test_lastname_lenght(self):
+        user = ...
+        try:
+            toolong= 'x'*120
+            user = self.create_default_test_user(username=self.username+"l", last_name=toolong)
+            user.full_clean()
+        except:
+            user = None
+        self.assertEqual(user, None, "user was created")
