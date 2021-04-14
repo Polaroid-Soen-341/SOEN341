@@ -35,24 +35,8 @@
                 </v-row>
               </template>
             </v-img>
-            <div class="px-4">
-              <v-btn icon
-                      :color="likeBtn? 'pink' : ''"
-                      large
-                      @click="likeClicked()">
-                <v-icon>mdi-heart</v-icon>
-              </v-btn>
-              <v-btn icon
-                      color="black"
-                      large>
-                <v-icon>mdi-comment-outline</v-icon>
-              </v-btn>
-            </div>
-            <div class="px-4">
-              20 Likes
-            </div>
             <div class="px-4 pb-2">
-              <strong>{{ user }}</strong> - {{ postDetails.description }}
+              <strong>{{ postDetails.owner.username }}</strong> - {{ postDetails.description }}
             </div>
             <div class="px-4">
               <v-textarea
@@ -70,7 +54,7 @@
             <div v-for="comment in postDetails.comments"
                   :key="comment.id"
                   class="px-4">
-                  <strong>{{ user }}</strong> - {{ comment.content }}
+                  <strong>{{ comment.owner.username }}</strong> - {{ comment.content }}
             </div>
           </div>
         </v-card-text>
@@ -84,41 +68,30 @@
 import axios from 'axios';
 export default {
   name: 'ViewPostDialog',
-  props: ['showDialog', 'postDetails', 'user'],
+  props: ['showDialog', 'postDetails'],
   data () {
     return {
       loading: false,
-      newPost: {},
-      image: null,
-      description: '',
-      rules: [
-      value => !value || value.size < 2000000 || 'Avatar size should be less than 2 MB!',
-    ]
+      // rules: {comment: [v => !!v || 'Comment must not be empty']}
     }
   },
   methods: {
-    saveClicked() {
-      this.loading = true;
-      console.log(this.newPost)
-      var formData = new FormData()
-      formData.append("picture", this.image, this.image.name)
-      formData.append("description", this.description)
-      console.log(formData.getAll("image"))
-      var token = this.$session.get('token')
-      axios.post('http://localhost:8000/content/post/', formData, {headers: {Authorization: 'JWT ' + token, 'content-type': 'multipart/form-data'}}).then(response => {
-        console.log(response.data)
+    sendComment(comment, post) {
+      if (typeof comment !== 'undefined') {
+        var token = this.$session.get('token')
+        delete(post.content)
+        var formData = new FormData()
+        formData.append("post", post.id)
+        formData.append("content", comment)
+        axios.post('http://localhost:8000/content/comment/', formData, {headers: {Authorization: 'JWT ' + token}}).then(response => {
+          this.feedPosts = response.data
+          console.log(this.feedPosts)
         }).catch(e => {
-        this.loading = false
-        console.log(e)
+          console.log(e)
         })
-      this.description = ''
-      this.image = null
-      this.$emit('saveClicked')
+      }
     },
     cancelClicked() {
-      this.description = ''
-      this.image = null
-      this.newPost = {}
       this.$emit('cancelClicked')
     }
   }

@@ -12,19 +12,21 @@
               <div>
                 <div class="pb-2">
                   <span class="text-h5 headline px-4" align="left">{{ userInfo.first_name }} {{ userInfo.last_name }}</span>
-                  <v-btn class="white--text text-capitalize mx-2"
+                  <v-btn v-if="followIsHidden"
+                        class="white--text text-capitalize mx-2"
                         small
                         rounded
                         color="blue"
                         @click="follow()">
                     Follow
                   </v-btn>
-                  <v-btn class="white--text text-capitalize"
+                  <v-btn v-if="unfollowIsHidden"
+                        class="white--text text-capitalize"
                         small
                         rounded
                         outlined
                         color="blue"
-                        @click="logout()">
+                        @click="follow()">
                     Unfollow
                   </v-btn>
                 </div>
@@ -81,7 +83,6 @@
 
           <ViewPostDialog :showDialog="showPostDetails"
                           :postDetails="allPostDetails"
-                          :user="currentUser"
                          @cancelClicked="showPostDetails = false"
                          @saveClicked="showPostDetails = false"/>
 
@@ -103,21 +104,21 @@ export default {
       userPosts: {},
       user: null,
       userInfo: null,
+      followIsHidden: false,
+      unfollowIsHidden: false,
+      currentUser: null,
       showPostDetails: false,
       allPostDetails: {}
   }),
   methods: {
     follow() {
-      // this.loading = true;
-      // axios.get('http://localhost:8000/api-auth/user/getAll').then(response => {
-      //   this.allUsers = response.data
-      //   console.log(this.allUsers)
-      //   this.snackbarApproved = true
-      // }).catch(e => {
-      //   this.snackbarError = true
-      //   this.loading = false
-      //   console.log(e)
-      // })
+      var token = this.$session.get('token')
+      axios.get('http://localhost:8000/api-auth/user/follow/' + this.user, {headers: {Authorization: 'JWT ' + token}}).then(response => {
+        console.log(response.data)
+        this.loadUser()
+      }).catch(e => {
+        console.log(e)
+      })
     },
     fetchPosts() {
       this.showPostDialog = false
@@ -136,7 +137,23 @@ export default {
     loadUser(){
       this.userInfo = this.$route.query.userprofile
       this.user = this.userInfo.username
-      console.log(this.userInfo)
+      this.verifyFollow()
+    },
+    verifyFollow(){
+      var token = this.$session.get('token')
+      axios.get('http://localhost:8000/api-auth/user/current', {headers: {Authorization: 'JWT ' + token}}).then(response => {
+         this.currentUser = response.data
+        if(this.currentUser.following.some(item => item.username === this.user) !== false){
+          this.followIsHidden = false
+          this.unfollowIsHidden = true
+        }
+        else{
+          this.followIsHidden = true
+          this.unfollowIsHidden = false
+        }
+       }).catch(e => {
+         console.log(e)
+       })
     }
   },
   mounted() {

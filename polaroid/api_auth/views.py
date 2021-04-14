@@ -26,6 +26,10 @@ class UserAuth(GenericUserView, generics.ListAPIView):
 class GetUsers(GenericUserView, generics.ListAPIView):
     permission_classes = (AllowAny, )
 
+class CurrentUserView(GenericUserView, generics.RetrieveAPIView):
+    def get(self, request):
+        serializer = serializers.UserSerializer(request.user)
+        return Response(serializer.data)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])

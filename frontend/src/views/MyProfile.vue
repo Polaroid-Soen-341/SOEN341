@@ -7,14 +7,14 @@
               <v-avatar
                 color="blue"
                 size="100">
-                <span class="white--text">{{ currentUser }}</span>
+                <span class="white--text">{{ currentUser.username }}</span>
               </v-avatar>
               <div>
                 <div class="pb-2">
-                  <span class="text-h5 headline px-4" align="left">{{ currentUser }}</span>
+                  <span class="text-h5 headline px-4" align="left">{{ currentUser.first_name }} {{ currentUser.last_name }}</span>
                 </div>
                   <span class="subtitle-2 pl-4" align="left">Followers: 0</span>
-                  <span class="subtitle-2 pl-4" align="left">Following: 0</span>
+                  <span class="subtitle-2 pl-4" align="left">Following: {{ currentUser.following.length }}</span>
               </div>
             </v-card-title>
 
@@ -81,7 +81,6 @@
           
           <ViewPostDialog :showDialog="showPostDetails"
                           :postDetails="allPostDetails"
-                          :user="currentUser"
                          @cancelClicked="showPostDetails = false"
                          @saveClicked="showPostDetails = false"/>
 
@@ -101,7 +100,7 @@ export default {
     ViewPostDialog
   },
   data: () => ({
-    currentUser: '',
+    currentUser: null,
     myPosts: {},
     loading: false,
     showPostDialog: false,
@@ -119,15 +118,19 @@ export default {
     },
     fetchPosts() {
       this.showPostDialog = false
-      axios.get('http://localhost:8000/content/post/user/' + this.currentUser).then(response => {
+      axios.get('http://localhost:8000/content/post/user/' + this.$session.get('current_user')).then(response => {
          this.myPosts = response.data
-         console.log(this.myPosts)
        }).catch(e => {
          console.log(e)
        })
     },
     loadUser(){
-      this.currentUser = this.$session.get('current_user')
+      var token = this.$session.get('token')
+      axios.get('http://localhost:8000/api-auth/user/current', {headers: {Authorization: 'JWT ' + token}}).then(response => {
+         this.currentUser = response.data
+       }).catch(e => {
+         console.log(e)
+       })
     }
   },
   mounted() {

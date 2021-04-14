@@ -32,22 +32,6 @@
                         </template>
                       </v-img>
                     </div>
-                    <div class="px-4">
-                      <v-btn icon
-                             :color="likeBtn? 'pink' : ''"
-                             large
-                             @click="likeClicked()">
-                        <v-icon>mdi-heart</v-icon>
-                      </v-btn>
-                      <v-btn icon
-                             color="black"
-                             large>
-                        <v-icon>mdi-comment-outline</v-icon>
-                      </v-btn>
-                    </div>
-                    <div class="px-4">
-                      20 Likes
-                    </div>
                     <div class="px-4 pb-2">
                       <strong>{{ post.owner.username }}</strong> - {{ post.description }}
                     </div>
@@ -105,22 +89,21 @@ export default {
        })
     },
     sendComment(comment, post) {
-      this.showPostDialog = false
-      var token = this.$session.get('token')
-      delete(post.content)
-      var formData = new FormData()
-      formData.append("post", post.id)
-      formData.append("content", comment)
-      axios.post('http://localhost:8000/content/comment/', formData, {headers: {Authorization: 'JWT ' + token}}).then(response => {
-         this.feedPosts = response.data
-         console.log(this.feedPosts)
-       }).catch(e => {
-         console.log(e)
-       })
-       this.fetchPosts()
-    },
-    likeClicked() {
-      this.likeBtn = !this.likeBtn
+      if (typeof comment !== 'undefined') {
+        this.showPostDialog = false
+        var token = this.$session.get('token')
+        delete(post.content)
+        var formData = new FormData()
+        formData.append("post", post.id)
+        formData.append("content", comment)
+        axios.post('http://localhost:8000/content/comment/', formData, {headers: {Authorization: 'JWT ' + token}}).then(response => {
+          this.feedPosts = response.data
+          console.log(this.feedPosts)
+          this.fetchPosts()
+        }).catch(e => {
+          console.log(e)
+        })
+      }
     }
   }
 }
