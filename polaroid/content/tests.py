@@ -6,8 +6,8 @@ from .models import *
 
 class PostCreationTestCase(TestCase):
     def setUp(self):
-        owner = User.objects.create_user("admin", "adminadmin.com", "pass")
-        Post.objects.create(title="Post 1", description="whatever", owner=owner)
+        self.owner = User.objects.create_user("PostCreationTestCase", "PostCreationTestCase@admin.com", "pass")
+        Post.objects.create(title="Post 1", description="whatever", owner=self.owner)
 
     def test_post_were_created(self):
         """Test if posts were created correctly"""
@@ -16,16 +16,19 @@ class PostCreationTestCase(TestCase):
 
     def test_post_title_limit(self):
         #limit = 100 char
-        owner = User.objects.create_user("admin", "adminadmin.com", "pass")
         toolong= 'x'*120
-        post = Post.objects.create(title=toolong, description="whatever", owner=owner)
-
-
+        post = Post()
+        try:
+            post = Post.objects.create(title=toolong, description="whatever", owner=self.owner)
+        except Exception as e:
+            post = None
+        self.assertIsNot(post, None, "Object was created with title of lenght " + str(len(toolong)))
+        assert post != None
 
         
 class CommentCreationTestCase(TestCase):
     def setUp(self):
-        self.owner = User.objects.create_user("admin", "adminadmin.com", "pass")
+        self.owner = User.objects.create_user("CommentCreationTestCase", "CommentCreationTestCase@admin.com", "pass")
         post=Post.objects.create(title="Post 1", description="whatever", owner=self.owner)
         Comment.objects.create(content="Lorem Ipsum",post=post,owner=self.owner)
         
