@@ -111,23 +111,6 @@
                           </td>
                         </tr>
                       </template>
-                      <!-- <v-row v-for="user in users"
-                             :key="user.username">
-                        <v-col cols="12"
-                              sm="6"
-                              md="6">
-                          <v-text-field v-model="user.username"></v-text-field>
-                        </v-col>
-                        <v-col v-if="headers1.value === actions">
-                            <v-btn class="white--text text-capitalize mx-2"
-                                  small
-                                  rounded
-                                  color="blue"
-                                  @click="follow(item)">
-                              Follow
-                            </v-btn>
-                        </v-col>
-                      </v-row> -->
                     </v-data-table>
                   </v-card>
                 </v-tab-item>
@@ -135,22 +118,15 @@
             </v-card-text>
           </v-card>
 
-          <NewPostDialog :showDialog="showPostDialog"
-                         @cancelClicked="showPostDialog = false"/>
-
         </v-flex>
       </v-layout>
     </v-container>
 </template>
 
 <script>
-import NewPostDialog from '../components/NewPostDialog'
 import axios from 'axios';
 export default {
   name: 'Connections',
-  components: {
-    NewPostDialog
-  },
   data: () => ({
       currentUser: '',
       tab: null,
@@ -179,7 +155,15 @@ export default {
       this.loading = true;
       axios.get('http://localhost:8000/api-auth/user/getAll').then(response => {
         this.users = response.data
-        console.log(this.users)
+        this.users = this.users.filter(item => item.username !== this.currentUser)
+        var token = this.$session.get('token')
+        axios.get('http://localhost:8000/api-auth/user/following/', {headers: {Authorization: 'JWT ' + token}}).then(response => {
+          for(var i in response.data){
+            this.users = this.users.filter(item => item.username !== response.data[i].username)
+          }
+        }).catch(e => {
+          console.log(e)
+        })
         this.snackbarApproved = true
       }).catch(e => {
         this.snackbarError = true
@@ -191,16 +175,17 @@ export default {
       var token = this.$session.get('token')
       axios.get('http://localhost:8000/api-auth/user/follow/' + user.username, {headers: {Authorization: 'JWT ' + token}}).then(response => {
         console.log(response.data)
+        this.myConnections()
+        this.getAllUsers()
       }).catch(e => {
         console.log(e)
       })
-      this.myConnections()
     },
     myConnections() {
       var token = this.$session.get('token')
       axios.get('http://localhost:8000/api-auth/user/following/', {headers: {Authorization: 'JWT ' + token}}).then(response => {
         this.connections = response.data
-        console.log(response.data)
+        //console.log(response.data)
       }).catch(e => {
         console.log(e)
       })
@@ -221,8 +206,8 @@ export default {
   computed: {
   },
   mounted() {
-    this.getAllUsers()
     this.loadUser()
+    this.getAllUsers()
     this.myConnections()
   }
 }

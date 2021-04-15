@@ -59,7 +59,7 @@ export default {
       image: null,
       description: '',
       rules: [
-      value => !value || value.size < 2000000 || 'Avatar size should be less than 2 MB!',
+      value => !value || value.size < 2000000 || 'Image size should be less than 2 MB!',
     ]
     }
   },
