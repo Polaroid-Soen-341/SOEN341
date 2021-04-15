@@ -40,6 +40,12 @@ class User(AbstractBaseUser, PermissionsMixin):
                             blank=True,
                             symmetrical=False
                         )
+    followers           = models.ManyToManyField(
+                            'self',
+                            blank=True,
+                            related_name='user_followers',
+                            symmetrical=False
+                        )
     
     is_active           = models.BooleanField(default=True)
     is_staff            = models.BooleanField(default=False)

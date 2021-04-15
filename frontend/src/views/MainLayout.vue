@@ -89,8 +89,8 @@ export default {
       { id: 0, text: 'My Feed', path: '/feed', icon: 'mdi-view-list' },
       { id: 1, text: 'My Profile', path: '/myprofile', icon: 'mdi-account' },
       { id: 2, text: 'My Connections', path: '/connections', icon: 'mdi-account-multiple-plus' },
-      { id: 3, text: 'Notifications', path: '/feed', icon: 'mdi-bell' },
-      { id: 4, text: 'Settings', path: '/myprofile', icon: 'mdi-cog' }
+      { id: 3, text: 'Notifications', path: '/notifications', icon: 'mdi-bell' },
+      { id: 4, text: 'Settings', path: '/settings', icon: 'mdi-cog' }
     ]
   }),
   methods: {

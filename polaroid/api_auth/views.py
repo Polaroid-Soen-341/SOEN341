@@ -26,6 +26,10 @@ class UserAuth(GenericUserView, generics.ListAPIView):
 class GetUsers(GenericUserView, generics.ListAPIView):
     permission_classes = (AllowAny, )
 
+class CurrentUserView(GenericUserView, generics.RetrieveAPIView):
+    def get(self, request):
+        serializer = serializers.UserSerializer(request.user)
+        return Response(serializer.data)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -38,8 +42,10 @@ def follow_user(request, username):
     following = instance.following.all()
     if user_to_follow[0] not in following:
         instance.following.add(user_to_follow[0])
+        user_to_follow[0].followers.add(instance)
     else:
         instance.following.remove(user_to_follow[0])
+        user_to_follow[0].followers.remove(instance)
 
     serializer = serializers.UserSerializer(instance, data=request.data, partial=True)
     if serializer.is_valid(raise_exception=False):
