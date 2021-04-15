@@ -72,7 +72,7 @@ export default {
   data () {
     return {
       loading: false,
-      // rules: {comment: [v => !!v || 'Comment must not be empty']}
+      userPost: {}
     }
   },
   methods: {
@@ -91,9 +91,29 @@ export default {
         })
       }
     },
+    fetchPosts() {
+      this.feedPosts = []
+      var token = this.$session.get('token')
+      axios.get('http://localhost:8000/api-auth/user/current', {headers: {Authorization: 'JWT ' + token}}).then(response => {
+         this.currentUserInfo = response.data
+         for(var i in this.currentUserInfo.following){
+            axios.get('http://localhost:8000/content/post/user/' + this.currentUserInfo.following[i].username).then(response => {
+            this.feedPosts = this.feedPosts.concat(response.data)
+            }).catch(e => {
+              console.log(e)
+            })
+         }
+       }).catch(e => {
+         console.log(e)
+       })
+    },
     cancelClicked() {
       this.$emit('cancelClicked')
     }
+  },
+  created(){
+    this.userPost = this.postDetails
+    //console.log(this.userPost)
   }
 }
 </script>

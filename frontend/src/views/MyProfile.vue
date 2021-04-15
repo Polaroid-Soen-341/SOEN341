@@ -13,7 +13,7 @@
                 <div class="pb-2">
                   <span class="text-h5 headline px-4" align="left">{{ currentUser.first_name }} {{ currentUser.last_name }}</span>
                 </div>
-                  <span class="subtitle-2 pl-4" align="left">Followers: 0</span>
+                  <span class="subtitle-2 pl-4" align="left">Followers: {{ currentUser.followers.length }}</span>
                   <span class="subtitle-2 pl-4" align="left">Following: {{ currentUser.following.length }}</span>
               </div>
             </v-card-title>
@@ -112,7 +112,6 @@ export default {
       this.showPostDialog = true
     },
     postDetails(post) {
-      console.log(post)
       this.allPostDetails = post
       this.showPostDetails = true
     },

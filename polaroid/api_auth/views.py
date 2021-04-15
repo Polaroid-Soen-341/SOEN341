@@ -42,8 +42,10 @@ def follow_user(request, username):
     following = instance.following.all()
     if user_to_follow[0] not in following:
         instance.following.add(user_to_follow[0])
+        user_to_follow[0].followers.add(instance)
     else:
         instance.following.remove(user_to_follow[0])
+        user_to_follow[0].followers.remove(instance)
 
     serializer = serializers.UserSerializer(instance, data=request.data, partial=True)
     if serializer.is_valid(raise_exception=False):

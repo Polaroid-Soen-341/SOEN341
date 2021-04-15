@@ -9,6 +9,7 @@ class SubUserSerializer(serializers.ModelSerializer):
         fields = ('username', 'email', 'id')
 class UserSerializer(serializers.ModelSerializer):
     following = SubUserSerializer(many=True, required=False)
+    followers = SubUserSerializer(many=True, required=False)
     class Meta:
         model = User 
         fields = (
@@ -17,7 +18,8 @@ class UserSerializer(serializers.ModelSerializer):
             'first_name', 
             'last_name', 
             'password', 
-            'following'
+            'following',
+            'followers'
         )
         extra_kwargs = {'password': {'write_only': True}}
 

@@ -30,7 +30,7 @@
                     Unfollow
                   </v-btn>
                 </div>
-                  <span class="subtitle-2 pl-4" align="left">Followers: 0</span>
+                  <span class="subtitle-2 pl-4" align="left">Followers: {{ userInfo.followers.length }}</span>
                   <span class="subtitle-2 pl-4" align="left">Following: {{ userInfo.following.length }}</span>
               </div>
             </v-card-title>
@@ -130,7 +130,6 @@ export default {
        })
     },
     postDetails(post) {
-      console.log(post)
       this.allPostDetails = post
       this.showPostDetails = true
     },
