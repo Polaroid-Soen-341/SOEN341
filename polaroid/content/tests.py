@@ -4,13 +4,12 @@ from api_auth.models import User, UserManager
 from .models import Post, Comment
 from .serializers import CommentSerializer, PostSerializer
 
-# Create your tests here.
 
 class PostCreationTestCase(PolaroidUserTest):
     
     def setUp(self):
         self.create_default_test_user("pctc")
-        self.owner = User.objects.get(username=self.username)
+        self.owner = User.objects.get(username="pctc")
         Post.objects.create(title="post_test" , description="whatever", owner=self.owner)
 
     def test_post_were_created(self):
@@ -67,7 +66,9 @@ class CommentCreationTestCase(TestCase):
          self.create_default_test_user("follow_test_1")
          self.create_default_test_user("follow_test_2")
 
-#     def Test_use_can_follow(self):
+    def Test_use_can_follow(self):
+        user1 =User.objects.get(username="follow_test_1")
+        user2 =User.objects.get(username="follow_test_2")
 
 #         #make user1 follow user2 them follow
 #         #assert user1 follows user2

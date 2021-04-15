@@ -1,6 +1,7 @@
 from django.test import TestCase
 from api_auth.models import User
 
+#add method to django TestCase to make email and password based on username
 class PolaroidUserTest(TestCase):
     
     def __create_user(self, callback, username="", password="", first_name="", last_name="", is_superuser=False):
