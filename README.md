@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.com/Polaroid-Soen-341/SOEN341.svg?branch=unittest)](https://travis-ci.com/Polaroid-Soen-341/SOEN341)
 # SOEN341
 ## Description
 Nowadays, social media is used by a large portion of the population. This project is a simplified version of 
