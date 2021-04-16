@@ -22,8 +22,8 @@ six==1.15.0
 sqlparse==0.4.1
 toml==0.10.2
 wrapt==1.12.1
-django-cors-headers
 django-allauth
 django-rest-auth
 wheel==0.36.2
 wrapt==1.12.1
+pytest-django
