@@ -142,7 +142,7 @@ export default {
         ],
         username: [
           v => !!v || 'Username is required',
-          v => (v && v.length > 1) || 'A username must be more than 1 characters long',
+          v => (v && v.length > 3) || 'A username must be more than 3 characters long',
           v => /^[a-zA-Z0-9_]+$/.test(v) || 'A username can only contain letters'
         ],
         email: [
