@@ -122,15 +122,12 @@ class SuperUserCreationTestCase(PolaroidUserTest):
         self.assertEqual(user, None, "user was created")
         #user should not be created
 
-# class UserModelsSerializerTestCase(PolaroidUserTest):
-#     def setUp(self):
-#         self.user1 = self.create_default_test_user("umstc1")
-#         self.user2 = self.create_default_test_user("umstc2")
+class UserModelsSerializerTestCase(PolaroidUserTest):
+    def setUp(self):
+        self.user1 = self.create_default_test_user("umstc1")
+        self.user2 = self.create_default_test_user("umstc2")
     
-#     def test_following_users(self):
-#         self.user1.following.add(self.user2)
-#         self.user1.save()
-#         fine = False
-#         if self.user2 in User.objects.get("umstc1").following:
-#             fine = True
-#         self.assertEqual(fine, True)
+    def test_following_users(self):
+        self.user1.following.add(self.user2)
+        self.user1.save()
+        self.assertEqual(self.user2 in self.user1.following.all(), True)
