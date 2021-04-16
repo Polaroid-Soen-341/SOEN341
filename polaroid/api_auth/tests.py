@@ -3,7 +3,7 @@ from ptest.ptest import PolaroidUserTest
 from .models import User, UserManager
 from .serializers import UserSerializer
 
-class UserCreationTestCase( ):
+class UserCreationTestCase(PolaroidUserTest):
     def setUp(self):
         self.create_default_test_user("uctc")
 
