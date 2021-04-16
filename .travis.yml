@@ -1,21 +1,8 @@
-language: python
-python:
-- 3.9.1
-#command to instal dependencies
-install:
-- pip install -r requirements.txt
+services:
+  - docker
 
-#command to run tests
+before_install:
+- docker pull thelastbilly/polaroid
+
 script:
-- pytest
-
-#deployment specifications
-#testing
-deploy: 
-  provider: pages
-  skip-cleanup: true
-  github-token: $GITHUB_TOKEN
-  keep_history: true
-
-  on: 
-    branch: develop
+  - docker run -ti -v $(pwd):/app thelastbilly/polaroid /app/run_tests.sh

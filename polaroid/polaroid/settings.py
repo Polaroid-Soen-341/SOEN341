@@ -37,6 +37,7 @@ CORS_ALLOWED_ORIGINS = [
 
 INSTALLED_APPS = [
     'api_auth.apps.ApiAuthConfig',
+    'content.apps.ContentConfig',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -48,7 +49,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
+
 ]
+
+AUTH_USER_MODEL = 'api_auth.User'
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -113,6 +117,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+        'TEST_NAME': BASE_DIR / 'test.sqlite3',
     }
 }
 
@@ -154,3 +159,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/content/media/'

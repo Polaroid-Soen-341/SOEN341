@@ -1,42 +1,68 @@
 from django.shortcuts import render
 from rest_framework import generics, permissions
 from rest_framework.permissions import AllowAny, IsAdminUser
-from django.contrib.auth.models import User, Group
+from rest_framework import status
+from rest_framework.response import Response
+from django.contrib.auth import get_user_model
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from . import serializers
-# from django.contrib.auth import authenticate
-# from django.views.decorators.csrf import csrf_exempt
-# from rest_framework.authtoken.models import Token
-# from rest_framework.decorators import api_view, permission_classes
-# from rest_framework.status import (
-#     HTTP_400_BAD_REQUEST,
-#     HTTP_404_NOT_FOUND,
-#     HTTP_200_OK
-# )
-# from rest_framework.response import Response
+from .models import User
 
-class UserCreate(generics.CreateAPIView):
-    queryset = User.objects.all()
+class GenericUserView():
     serializer_class = serializers.UserSerializer
+    queryset = User.objects.all()
+
+    def get_queryset(self):
+        return User.objects.all()
+
+class UserCreate(GenericUserView, generics.CreateAPIView):
     permission_classes = (AllowAny, )
 
-class UserAuth(generics.ListAPIView):
-    queryset = User.objects.all().order_by('first_name')
-    serializer_class = serializers.UserSerializer
+class UserAuth(GenericUserView, generics.ListAPIView):
     permission_classes = (permissions.IsAuthenticated,)
 
-# @csrf_exempt
-# @api_view(["POST"])
-# @permission_classes((AllowAny,))
-# def login(request):
-#     username = request.data.get("username")
-#     password = request.data.get("password")
-#     if username is None or password is None:
-#         return Response({'error': 'Please provide both username and password'},
-#                         status=HTTP_400_BAD_REQUEST)
-#     user = authenticate(username=username, password=password)
-#     if not user:
-#         return Response({'error': 'Invalid Credentials'},
-#                         status=HTTP_404_NOT_FOUND)
-#     token, _ = Token.objects.get_or_create(user=user)
-#     return Response({'token': token.key},
-#                     status=HTTP_200_OK)
+class GetUsers(GenericUserView, generics.ListAPIView):
+    permission_classes = (AllowAny, )
+
+class CurrentUserView(GenericUserView, generics.RetrieveAPIView):
+    def get(self, request):
+        serializer = serializers.UserSerializer(request.user)
+        return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def follow_user(request, username):
+    instance = request.user
+    user_to_follow = User.objects.filter(username=username)
+    if user_to_follow == None:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    
+    following = instance.following.all()
+    if user_to_follow[0] not in following:
+        instance.following.add(user_to_follow[0])
+        user_to_follow[0].followers.add(instance)
+    else:
+        instance.following.remove(user_to_follow[0])
+        user_to_follow[0].followers.remove(instance)
+
+    serializer = serializers.UserSerializer(instance, data=request.data, partial=True)
+    if serializer.is_valid(raise_exception=False):
+        serializer.save()
+        return Response(serializer.data)
+    else:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class GetFollowingUser(generics.ListAPIView):
+    serializer_class = serializers.UserSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+    def get_queryset(self):
+        return self.request.user.following.all()
+
+class GetFollowingUsers(generics.ListAPIView):
+    serializer_class = serializers.UserSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+    def get_queryset(self):
+        return User.objects.filter(username=self.kwargs['pk'])[0].following.all()
