@@ -1,23 +1,27 @@
 from rest_framework.settings import api_settings
 from rest_framework import serializers
-from django.contrib.auth import get_user_model  
+from django.contrib.auth import get_user_model
 from .models import User, UserManager
+
 
 class SubUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('username', 'email', 'id')
+
+
 class UserSerializer(serializers.ModelSerializer):
     following = SubUserSerializer(many=True, required=False)
     followers = SubUserSerializer(many=True, required=False)
+
     class Meta:
-        model = User 
+        model = User
         fields = (
-            'email', 
+            'email',
             'username',
-            'first_name', 
-            'last_name', 
-            'password', 
+            'first_name',
+            'last_name',
+            'password',
             'following',
             'followers'
         )
