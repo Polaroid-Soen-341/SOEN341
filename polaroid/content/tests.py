@@ -2,6 +2,7 @@ from django.test import TestCase
 from ptest.ptest import PolaroidUserTest
 from api_auth.models import User, UserManager
 from api_auth.views import follow_user, GetFollowingUser
+from api_auth.serializers import UserSerializer
 from .models import Post, Comment
 from .serializers import CommentSerializer, PostSerializer
 
@@ -31,16 +32,15 @@ class PostCreationTestCase(PolaroidUserTest):
         assert post != None
         #post should not be created
     
-    def test_Post_serializer(self):
-        """Test posts serializer"""
-        self.post = Post.objects.get(title="post_test")
-        self.Post_serializer = PostSerializer(self.post)
+    # def test_post_serializer(self):
+    #     """Test posts serializer"""
+    #     post = Post.objects.get(title="post_test")
+    #     ps = PostSerializer(data=post)
+    #     self.assertEqual(ps.is_valid(raise_exception=True), True)
     # self.assertEqual(self.Post_serializer.Meta["title"],self.post.title)
     # self.assertEqual(self.Post_serializer.Meta["content"],self.post.content)
     # self.assertEqual(self.Post_serializer.Meta["owner"],self.post.owner)
 
-        
-        
 class CommentCreationTestCase(TestCase):
     """Testing comment model"""
     def setUp(self):
@@ -52,40 +52,28 @@ class CommentCreationTestCase(TestCase):
         """Test comment creation"""
         self.comment = Comment.objects.get(post= Post.objects.get(title="comment_test"))
         self.assertEqual(self.comment.content,"Lorem Ipsum", "comment created")
-    def test_comment_serializer(self):
-        """Test comment serializer"""
-        self.comment = Comment.objects.get(post= Post.objects.get(title="comment_test"))
-        self.Post_serializer = PostSerializer(self.comment)
-        # self.assertEqual(self.Post_serializer.Meta["title"],self.post.title)
-        # self.assertEqual(self.Post_serializer.Meta["content"],self.post.content)
-        # self.assertEqual(self.Post_serializer.Meta["owner"],self.post.owner)
 
+class ContentModelSerializersTestCase(PolaroidUserTest):
+    def setUp(self):
+        self.owner = self.create_default_test_user("cmstc")
+        self.post = Post.objects.create(title="post_test" , description="whatever", owner=self.owner)
+    
+    def test_post_creation_on_serializer(self):
+        """Test post creation serializer"""
+        data = {
+            'title': "test post", 
+            'description' : "test post", 
+            'owner': UserSerializer(self.owner)
+        }
+        ps = PostSerializer(data=data)
+        self.assertEqual(ps.is_valid(raise_exception=False), True)
 
-
-
-# class FollwingTestCase(PolaroidUserTest):
-#     """Testing Following model"""
-#     def setUp(self):
-#          self.create_default_test_user("follow_test_1")
-#          self.create_default_test_user("follow_test_2")
-
-#     def find_follower(self,list_of_follower):
-#         for a in list_of_follower:
-#             if a.username == "follow_test_2":
-#                 return True
-#         return False
-
-#     def Test_use_can_follow(self):
-#         self.user1 =User.objects.get(username="follow_test_1")
-#         self.user2 =User.objects.get(username="follow_test_2")
-#         #user 1 follow user 2
-#         print("did I run?")
-#         follow_user(user1,"follow_test_2")
-#         user1_list_of_follower = user1.GetFollowingUser.get_queryset()
-#         user2_list_of_follower = user2.GetFollowingUser.get_queryset()
-#         self.assertEqual(find_follower(user1_list_of_follower),True,"User1 can follow")
-#         self.assertEqual(find_follower(user2_list_of_follower),False,"User2 did not follow back")
-
-#         make user1 follow user2 them follow
-#         assert user1 follows user2
-#         assert user2 does not follow user1
+    def test_comment_creation_on_serializer(self):
+        """Test comment creation serializer"""
+        data = {
+            'content' : "test comment", 
+            'owner': UserSerializer(self.owner),
+            'post' : PostSerializer(self.post)
+        }
+        ser = PostSerializer(data=data)
+        self.assertEqual(ser.is_valid(raise_exception=False), True)

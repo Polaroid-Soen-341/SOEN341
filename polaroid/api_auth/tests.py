@@ -1,7 +1,7 @@
 from django.test import TestCase
 from ptest.ptest import PolaroidUserTest
 from .models import User, UserManager
-
+from .serializers import UserSerializer
 
 class UserCreationTestCase( ):
     def setUp(self):
@@ -121,3 +121,16 @@ class SuperUserCreationTestCase(PolaroidUserTest):
             user = None
         self.assertEqual(user, None, "user was created")
         #user should not be created
+
+# class UserModelsSerializerTestCase(PolaroidUserTest):
+#     def setUp(self):
+#         self.user1 = self.create_default_test_user("umstc1")
+#         self.user2 = self.create_default_test_user("umstc2")
+    
+#     def test_following_users(self):
+#         self.user1.following.add(self.user2)
+#         self.user1.save()
+#         fine = False
+#         if self.user2 in User.objects.get("umstc1").following:
+#             fine = True
+#         self.assertEqual(fine, True)
