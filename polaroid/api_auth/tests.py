@@ -128,6 +128,7 @@ class UserModelsSerializerTestCase(PolaroidUserTest):
         self.user2 = self.create_default_test_user("umstc2")
     
     def test_following_users(self):
+        """Testing follower serializer"""
         self.user1.following.add(self.user2)
         self.user1.save()
         self.assertEqual(self.user2 in self.user1.following.all(), True)
