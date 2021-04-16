@@ -3,7 +3,6 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, \
     PermissionsMixin
 
-
 class UserManager(BaseUserManager):
     def create_user(self, email, username, password=None, **extra_fields):
         if not email:
@@ -18,6 +17,7 @@ class UserManager(BaseUserManager):
 
         return user
 
+    
     def create_superuser(self, username, email, password):
         user = self.create_user(email, username, password)
         user.is_staff = True
@@ -30,31 +30,31 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     username            = models.CharField(max_length=20, unique=True)
     email               = models.EmailField(unique=True)
-    first_name          = models.CharField(max_length=20)
-    last_name           = models.CharField(max_length=20)
+    first_name          = models.CharField(max_length=20, blank=True)
+    last_name           = models.CharField(max_length=20, blank=True)
     birthday            = models.DateField(blank=True, null=True)
 
-    following = models.ManyToManyField(
+    following           = models.ManyToManyField(
                             'self',
                             related_name="user_following",
                             blank=True,
                             symmetrical=False
                         )
-    followers = models.ManyToManyField(
+    followers           = models.ManyToManyField(
                             'self',
                             blank=True,
                             related_name='user_followers',
                             symmetrical=False
                         )
+    
+    is_active           = models.BooleanField(default=True)
+    is_staff            = models.BooleanField(default=False)
+    date_joined         = models.DateTimeField(auto_now_add=True)
 
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
-    date_joined = models.DateTimeField(auto_now_add=True)
+    objects             = UserManager()
 
-    objects = UserManager()
-
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email', 'password']
+    USERNAME_FIELD      = 'username'
+    REQUIRED_FIELDS     = ['email', 'password']
 
     def __str__(self):
         return str(self.username)
