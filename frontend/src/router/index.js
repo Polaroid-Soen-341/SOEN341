@@ -19,7 +19,12 @@ const routes = [
     name: 'MainLayout',
     component: () => import('../views/MainLayout.vue'),
     children: [
-      
+      {path: '/feed', name: 'Feed', component: () => import('../views/Feed.vue')},
+      {path: '/myprofile', name: 'MyProfile', component: () => import('../views/MyProfile.vue')},
+      {path: '/userprofile', name: 'UserProfile', component: () => import('../views/UserProfile.vue')},
+      {path: '/connections', name: 'Connections', component: () => import('../views/Connections.vue')},
+      {path: '/notifications', name: 'Notifications', component: () => import('../views/Notifications.vue')},
+      {path: '/settings', name: 'Settings', component: () => import('../views/Settings.vue')},
     ]
   }
 ]
