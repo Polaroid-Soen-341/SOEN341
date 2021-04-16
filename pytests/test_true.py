@@ -4,4 +4,4 @@ def truthy():
 
 
 def test_truthy():
-    if truthy() is True
+    assert truthy() == True
